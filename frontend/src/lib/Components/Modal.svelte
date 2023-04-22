@@ -16,6 +16,6 @@
 </script>
 
 <button
-	class="btn btn-lg bg-primary-500 w-full hover:bg-secondary-400 hover:scale-105 transition-all ease-in-out"
+	class="btn btn-lg bg-primary-700 w-full hover:bg-secondary-700 hover:text-white hover:scale-105 transition-all ease-in-out"
 	on:click={modalDemo(modalSettings)}>{buttonLabel}</button
 >
