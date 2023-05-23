@@ -2,6 +2,8 @@ import { writable } from 'svelte/store';
 
 export const pickedState = writable('initial value');
 
+export const sharedProps = writable([]);
+
 export function setPickedState(value: string) {
 	pickedState.update(() => value);
 }

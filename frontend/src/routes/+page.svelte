@@ -3,13 +3,36 @@
 
 	import Heading from '$lib/Components/Heading.svelte';
 	import InitialCard from '$lib/Components/InitialCard.svelte';
-	import { pickedState } from './state';
+	import { pickedState, sharedProps } from './state';
 	import Checkbox from '$lib/Components/Checkbox.svelte';
 
 	let state = 'start';
-
+	export let data;
 	const subscribe = pickedState.subscribe((value) => {
 		state = value;
+	});
+
+	let csvData = data.data;
+
+	let checkboxNames = [];
+	let tmpObject = {};
+	csvData.forEach((element, index) => {
+		if (element[9] != '' && element[9] != undefined && index != 0) {
+			tmpObject = {
+				id: element[8], // id in csv
+				name: element[9], // name in csv
+				tooltip: element[11], // tooltip in csv
+				presets: {
+					hiat: element[0] == 'x' ? true : false,
+					gat: element[1] == 'x' ? true : false,
+					transkript: element[2] == 'x' ? true : false,
+					korpus: element[3] == 'x' ? true : false,
+					meta: element[4] == 'x' ? true : false,
+					html: element[5] == 'x' ? true : false
+				}
+			};
+			checkboxNames.push(tmpObject);
+		}
 	});
 </script>
 
@@ -113,32 +136,44 @@
 						{
 							name: 'HIAT-Check',
 							tooltip: 'tooltip für HIAT-Check',
-							id: 'hiat-check'
+							id: 'hiat-check',
+							hasFunctionAttached: true,
+							functionToRun: ['setPreset', 'hiat']
 						},
 						{
 							name: 'GAT-Check',
 							tooltip: 'tooltip für GAT-Check',
-							id: 'gat-check'
+							id: 'gat-check',
+							hasFunctionAttached: true,
+							functionToRun: ['setPreset', 'gat']
 						},
 						{
 							name: 'Transkript-Check',
 							tooltip: 'tooltip für Transkript-Check',
-							id: 'transkript-check'
+							id: 'transkript-check',
+							hasFunctionAttached: true,
+							functionToRun: ['setPreset', 'transkript']
 						},
 						{
 							name: 'Korpus-Check',
 							tooltip: 'tooltip für Korpus-Check',
-							id: 'korpus-check'
+							id: 'korpus-check',
+							hasFunctionAttached: true,
+							functionToRun: ['setPreset', 'korpus']
 						},
 						{
 							name: 'Metadaten-Check',
 							tooltip: 'tooltip für Metadaten-Check',
-							id: 'metadaten-check'
+							id: 'metadaten-check',
+							hasFunctionAttached: true,
+							functionToRun: ['setPreset', 'meta']
 						},
 						{
 							name: 'HTML-Ansichten',
 							tooltip: 'tooltip für HTML-Ansichten',
-							id: 'html-ansichten'
+							id: 'html-ansichten',
+							hasFunctionAttached: true,
+							functionToRun: ['setPreset', 'html']
 						}
 					]}
 					checkboxClasses="w-1/8"
@@ -148,8 +183,8 @@
 			<p>Durch einen hover über die möglichkeiten, erhälst du informationen über die jeweillige Funktion</p>
 
 			<div class="w-full flex flex-wrap flex-row justify-center">
-				<div class="flex flex-row flex-wrap justify-center text-center w-1/2">
-					<Checkbox numberOfChoices="15" />
+				<div class="flex flex-row flex-wrap justify-center text-center w-3/4" id="functionChecks">
+					<Checkbox {checkboxNames} />
 				</div>
 			</div>
 			<!-- 			<p>Hier findest kannst du auswählen was "gefixt" werden soll</p>

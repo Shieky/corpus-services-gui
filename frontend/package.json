@@ -37,6 +37,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@floating-ui/dom": "^1.2.6"
+		"@floating-ui/dom": "^1.2.6",
+		"papaparse": "^5.4.1"
 	}
 }
