@@ -37,15 +37,10 @@
 						firstObjChecked = checkstate == true ? true : false;
 					}
 					checkbox.checked = checkstate == true ? true : false;
-				} else {
-					/* 	if (checkbox.id == firstPropId) {
-						firstObjChecked = false;
-					}
-					checkbox.checked = false;
-					checkbox.check = false; */
 				}
 			}
 		});
+		/* Workaround for refreshing the sibling component */
 		firstObj.dispatchEvent(event);
 		firstObj.checked = firstObjChecked;
 		firstObj.dispatchEvent(event);
