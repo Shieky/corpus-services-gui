@@ -130,7 +130,7 @@
 		<div class="text-center w-full" transition:fly={{ y: 200, duration: 300 }}>
 			<p>current state: {state}</p>
 			<h3 class="p-4">Mögliche presets</h3>
-			<div class="w-full flex flex-wrap flex-row justify-center">
+			<div class="w-full flex flex-wrap flex-row justify-center" id="presets">
 				<Checkbox
 					checkboxNames={[
 						{

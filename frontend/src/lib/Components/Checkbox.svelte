@@ -26,20 +26,26 @@
 
 	function setPreset(preset: string, checkstate: boolean) {
 		let props = $sharedProps;
-		let firstPropId = props[0].id;
+		let firstPropId = document.querySelector('#functionChecks')?.getElementsByTagName('input')[0].id;
+		//		console.log(firstPropId);
+
 		let event = new Event('change');
-		let firstObj = document.getElementById(firstPropId + '-cb');
+		let firstObj = document.getElementById(firstPropId);
+
 		let firstObjChecked;
 		props.forEach((checkbox) => {
 			if (checkbox.presets != undefined) {
 				if (checkbox.presets['' + preset] != undefined && checkbox.presets['' + preset] == true) {
-					if (checkbox.id == firstPropId) {
+					if (checkbox.id + '-cb' == firstPropId) {
 						firstObjChecked = checkstate == true ? true : false;
 					}
 					checkbox.checked = checkstate == true ? true : false;
+				} else {
+					checkbox.visible = !checkbox.visible;
 				}
 			}
 		});
+
 		/* Workaround for refreshing the sibling component */
 		firstObj.dispatchEvent(event);
 		firstObj.checked = firstObjChecked;
@@ -47,6 +53,8 @@
 	}
 
 	function checkFunc(cb) {
+		console.log(cbBind);
+
 		if (cb.hasFunctionAttached) {
 			cb.functionToRun[0] == 'setPreset' ? setPreset(cb.functionToRun[1], cb.checked) : null;
 		}
@@ -69,28 +77,31 @@
 			dataPopup: `tooltip-${id}`,
 			presets: checkboxNames[index - 1].presets,
 			hasFunctionAttached: checkboxNames[index - 1].hasFunctionAttached || false,
-			functionToRun: checkboxNames[index - 1].functionToRun || []
+			functionToRun: checkboxNames[index - 1].functionToRun || [],
+			visible: true
 		});
 	}
 	sharedProps.set(checkboxes);
 </script>
 
 {#each checkboxes as checkbox, index (checkbox.id)}
-	<label
-		use:popup={window[settings + checkbox.id]}
-		class="flex items-center justify-center space-x-2 {checkboxClasses} p-2 card-hover m-2 cursor-pointer text-center hover:bg-secondary-400
+	{#if checkbox.visible}
+		<label
+			use:popup={window[settings + checkbox.id]}
+			class="flex items-center justify-center space-x-2 {checkboxClasses} p-2 card-hover m-2 cursor-pointer text-center hover:bg-secondary-400
              {checkbox.checked ? 'bg-primary-500 outline outline-1 outline-white' : 'card'}"
-	>
-		{#if checkbox.hasFunctionAttached}
-			<input type="checkbox" bind:checked={checkbox.checked} bind:this={cbBind} on:change={checkFunc(checkbox)} class="hidden" />
-		{:else}
-			<input id="{checkbox.id}-cb" type="checkbox" bind:checked={checkbox.checked} class="hidden" />
-		{/if}
-		<p class="text-center p-2">{checkbox.name}</p>
-	</label>
-	<div class="dark:bg-slate-600 bg-white p-4" data-popup={checkbox.dataPopup}>
-		{checkbox.tooltip}
+		>
+			{#if checkbox.hasFunctionAttached}
+				<input id="{checkbox.id}-cb" type="checkbox" bind:checked={checkbox.checked} on:change={checkFunc(checkbox)} class="hidden" />
+			{:else}
+				<input id="{checkbox.id}-cb" type="checkbox" bind:checked={checkbox.checked} class="hidden" />
+			{/if}
+			<p class="text-center p-2">{checkbox.name}</p>
+		</label>
+		<div class="dark:bg-slate-600 bg-white p-4" data-popup={checkbox.dataPopup}>
+			{checkbox.tooltip}
 
-		<div class="arrow dark:bg-slate-600 bg-white" />
-	</div>
+			<div class="arrow dark:bg-slate-600 bg-white" />
+		</div>
+	{/if}
 {/each}
