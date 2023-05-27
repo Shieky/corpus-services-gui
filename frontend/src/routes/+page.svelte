@@ -34,6 +34,50 @@
 			checkboxNames.push(tmpObject);
 		}
 	});
+	let checkboxPresets = [
+		{
+			name: 'HIAT-Check',
+			tooltip: 'tooltip für HIAT-Check',
+			id: 'hiat-check',
+			hasFunctionAttached: true,
+			functionToRun: ['setPreset', 'hiat']
+		},
+		{
+			name: 'GAT-Check',
+			tooltip: 'tooltip für GAT-Check',
+			id: 'gat-check',
+			hasFunctionAttached: true,
+			functionToRun: ['setPreset', 'gat']
+		},
+		{
+			name: 'Transkript-Check',
+			tooltip: 'tooltip für Transkript-Check',
+			id: 'transkript-check',
+			hasFunctionAttached: true,
+			functionToRun: ['setPreset', 'transkript']
+		},
+		{
+			name: 'Korpus-Check',
+			tooltip: 'tooltip für Korpus-Check',
+			id: 'korpus-check',
+			hasFunctionAttached: true,
+			functionToRun: ['setPreset', 'korpus']
+		},
+		{
+			name: 'Metadaten-Check',
+			tooltip: 'tooltip für Metadaten-Check',
+			id: 'metadaten-check',
+			hasFunctionAttached: true,
+			functionToRun: ['setPreset', 'meta']
+		},
+		{
+			name: 'HTML-Ansichten',
+			tooltip: 'tooltip für HTML-Ansichten',
+			id: 'html-ansichten',
+			hasFunctionAttached: true,
+			functionToRun: ['setPreset', 'html']
+		}
+	];
 </script>
 
 <div class="container h-1/2 mx-auto flex justify-center items-center flex-wrap">
@@ -131,60 +175,18 @@
 			<p>current state: {state}</p>
 			<h3 class="p-4">Mögliche presets</h3>
 			<div class="w-full flex flex-wrap flex-row justify-center" id="presets">
-				<Checkbox
-					checkboxNames={[
-						{
-							name: 'HIAT-Check',
-							tooltip: 'tooltip für HIAT-Check',
-							id: 'hiat-check',
-							hasFunctionAttached: true,
-							functionToRun: ['setPreset', 'hiat']
-						},
-						{
-							name: 'GAT-Check',
-							tooltip: 'tooltip für GAT-Check',
-							id: 'gat-check',
-							hasFunctionAttached: true,
-							functionToRun: ['setPreset', 'gat']
-						},
-						{
-							name: 'Transkript-Check',
-							tooltip: 'tooltip für Transkript-Check',
-							id: 'transkript-check',
-							hasFunctionAttached: true,
-							functionToRun: ['setPreset', 'transkript']
-						},
-						{
-							name: 'Korpus-Check',
-							tooltip: 'tooltip für Korpus-Check',
-							id: 'korpus-check',
-							hasFunctionAttached: true,
-							functionToRun: ['setPreset', 'korpus']
-						},
-						{
-							name: 'Metadaten-Check',
-							tooltip: 'tooltip für Metadaten-Check',
-							id: 'metadaten-check',
-							hasFunctionAttached: true,
-							functionToRun: ['setPreset', 'meta']
-						},
-						{
-							name: 'HTML-Ansichten',
-							tooltip: 'tooltip für HTML-Ansichten',
-							id: 'html-ansichten',
-							hasFunctionAttached: true,
-							functionToRun: ['setPreset', 'html']
-						}
-					]}
-					checkboxClasses="w-1/8"
-				/>
+				{#each checkboxPresets as cbPreset}
+					<Checkbox checkbox={cbPreset} cbSize="1/8" />
+				{/each}
 			</div>
 			<hr class="m-4" />
 			<p>Durch einen hover über die möglichkeiten, erhälst du informationen über die jeweillige Funktion</p>
 
 			<div class="w-full flex flex-wrap flex-row justify-center">
 				<div class="flex flex-row flex-wrap justify-center text-center w-3/4" id="functionChecks">
-					<Checkbox {checkboxNames} />
+					{#each checkboxNames as cb}
+						<Checkbox checkbox={cb} cbSize="1/3" />
+					{/each}
 				</div>
 			</div>
 			<!-- 			<p>Hier findest kannst du auswählen was "gefixt" werden soll</p>
