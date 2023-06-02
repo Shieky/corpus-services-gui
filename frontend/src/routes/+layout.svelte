@@ -9,7 +9,7 @@
 	import { AppShell, AppBar, Modal, LightSwitch } from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
-	import { pickedState, setPickedState } from './state';
+	import { pickedState, resetSharedProps, setPickedState, sharedProps } from './state';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	let state = 'start';
 
@@ -28,7 +28,15 @@
 				<a href="/" class="text-xl uppercase font-normal" />
 			</svelte:fragment>
 			<svelte:fragment slot="default">
-				<p class="text-lg cursor-pointer" on:click={() => setPickedState('start')}>Reset state</p>
+				<p
+					class="text-lg cursor-pointer"
+					on:click={() => {
+						resetSharedProps();
+						setPickedState('start');
+					}}
+				>
+					Reset state
+				</p>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<LightSwitch />
@@ -36,7 +44,7 @@
 		</AppBar>
 	</svelte:fragment>
 	<svelte:fragment slot="footer">
-		<div class="text-center text-gray-500 pt-4 text-xs m-3 border-top-gradient">
+		<div class="text-center text-gray-500 pt-4 text-xs mb-3 border-top-gradient">
 			<p>Made with ❤️ by Felicitaz</p>
 		</div>
 	</svelte:fragment>
@@ -56,11 +64,6 @@
 		left: 0;
 		right: 0;
 		height: 1px; /* Set the border height here */
-		background: linear-gradient(
-			90deg,
-			transparent 0%,
-			rgba(0, 153, 255, 0.527) 50%,
-			transparent 100%
-		); /* Set the gradient colors here */
+		background: linear-gradient(90deg, transparent 0%, rgba(0, 153, 255, 0.527) 50%, transparent 100%); /* Set the gradient colors here */
 	}
 </style>

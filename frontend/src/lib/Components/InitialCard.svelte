@@ -14,7 +14,7 @@
 	};
 </script>
 
-<div class="card card-hover p-4 rounded-sm w-1/3 m-4 hover:border border-primary-500">
+<div class="variant-ghost-primary card-hover p-4 rounded-sm w-1/3 m-4 hover:border border-primary-500">
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div on:click={() => setPickedState(state)} class="cursor-pointer">
 		<h3 class="font-light p-4 no-underline">{cardHeader}</h3>
