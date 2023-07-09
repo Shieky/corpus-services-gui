@@ -6,7 +6,7 @@
 	export let buttonLabel: string;
 	export let state: string;
 	export let cardHeader: string;
-	export let cardBody: string;
+	export let cardBody: string = '';
 	type modalSettings = {
 		type: string;
 		title: string;
@@ -18,7 +18,9 @@
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div on:click={() => setPickedState(state)} class="cursor-pointer">
 		<h3 class="font-light p-4 no-underline">{cardHeader}</h3>
-		<p class="p-4">{cardBody}</p>
+		{#if cardBody != ''}
+			<p class="p-4">{cardBody}</p>
+		{/if}
 	</div>
 	<div class="card-footer text-center">
 		<Modal {buttonLabel} {modalSettings} />

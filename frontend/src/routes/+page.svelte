@@ -19,6 +19,11 @@
 		checkboxData = value;
 	});
 
+	let fixAvailable = false;
+	function isFixAvailable() {
+		fixAvailable = true;
+	}
+
 	let csvData = data.data;
 	let codeString = 'corpus-services';
 	let checkboxNames = [];
@@ -108,38 +113,76 @@
 
 <div class="container h-1/2 mx-auto flex justify-center items-center flex-wrap">
 	<div class="text-center w-full space-y-5 p-4">
-		<Heading headerText={state == 'initial value' || state == 'start' ? 'Corpus Services' : ''} headerSubtext={state == 'initial value' || state == 'start' ? 'Welche Dateien willst du bearbeiten?' : 'Welche funktionen möchtest du durchführen?'} />
+		<Heading headerText={state == 'initial value' || state == 'start' ? 'Corpus Services' : ''} headerSubtext={state == 'initial value' || state == 'start' ? 'Was möchtest du machen?' : 'Welche funktionen möchtest du durchführen?'} />
 		<hr class="border-top-gradient" />
 	</div>
 	{#if state == 'initial value' || state == 'start'}
 		<div class="text-center w-full space-y-5" transition:fly={{ y: 200, duration: 300 }}>
 			<div class="w-full flex flex-wrap flex-row justify-center">
 				<InitialCard
-					cardBody="Kleiner beschreibungs text"
-					cardHeader="EXMARaLDA Transkript(e) HIAT/GAT"
+					cardHeader="HIAT-Check"
 					state="hiat"
 					buttonLabel="Was ist das?"
 					modalSettings={{
 						type: 'alert',
 						title: 'Information',
-						body: 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amedasdasdsadadt'
+						body: 'HIAT-EXMARaLDA Transkript(e) strukturell und auf HIAT-Konventionen prüfen'
 					}}
 				/>
 				<InitialCard
-					cardBody="Kleiner beschreibungs text"
-					cardHeader="EXMARaLDA Transkript(e) FORMAL"
-					state="formal"
+					cardHeader="GAT-Check"
+					state="gat"
 					buttonLabel="Was ist das?"
 					modalSettings={{
 						type: 'alert',
 						title: 'Information',
-						body: 'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amedasdasdsadadt'
+						body: 'GAT-EXMARaLDATranskript(e) strukturell und aufGAT-Konventionen prüfen'
 					}}
 				/>
-				<Disclaimer content="Die hochgeladenen Daten werden nur im verarbeitungsprozess benutzt und nach Download komplett gelöscht." title="Datenschutz" color="secondary" />
+				<InitialCard
+					cardHeader="Transkript-Check"
+					state="transkript"
+					buttonLabel="Was ist das?"
+					modalSettings={{
+						type: 'alert',
+						title: 'Information',
+						body: 'EXMARaLDA-Transkripteformal prüfen'
+					}}
+				/>
+				<InitialCard
+					cardHeader="Metadaten-Check"
+					state="metadaten"
+					buttonLabel="Was ist das?"
+					modalSettings={{
+						type: 'alert',
+						title: 'Information',
+						body: 'Korpusaufbereiten und bereinigen'
+					}}
+				/>
+				<InitialCard
+					cardHeader="Korpus-Aufbereitung"
+					state="aufbereitung"
+					buttonLabel="Was ist das?"
+					modalSettings={{
+						type: 'alert',
+						title: 'Information',
+						body: 'Metadaten prüfen'
+					}}
+				/>
+				<InitialCard
+					cardHeader="HTML-Ansichten"
+					state="html"
+					buttonLabel="Was ist das?"
+					modalSettings={{
+						type: 'alert',
+						title: 'Information',
+						body: 'HTML-Ansichten erstellen'
+					}}
+				/>
 			</div>
+			<Disclaimer content="Die hochgeladenen Daten werden nur im verarbeitungsprozess benutzt und nach Download komplett gelöscht." title="Datenschutz" color="secondary" />
 		</div>
-	{:else if state == 'hiat' || state == 'formal' || state == 'segment' || state == 'coma-corpus' || state == 'coma-gesamt' || state == 'cmdi' || state == 'elan'}
+	{:else if state == 'hiat' || state == 'gat' || state == 'transkript' || state == 'metadaten' || state == 'aufbereitung' || state == 'html'}
 		<div class="text-center w-full" transition:fly={{ y: 200, duration: 300 }}>
 			<p>current state: {(prevState = state)}</p>
 			<h3 class="">Mögliche presets</h3>
@@ -173,7 +216,17 @@
 	{:else if state == 'fixes'}
 		<div class="text-center w-full" transition:fly={{ y: 200, duration: 300 }}>
 			<h3 class="p-4">Folgende ausgewählte möglichkeiten können zusätzlich einen "Fix" bekommen</h3>
-			<p>Durch einen hover über die möglichkeiten, erhälst du informationen über die jeweillige Funktion</p>
+			<!-- !Needs refactoring! -->
+			{#each checkboxData as cb}
+				{#if cb.checked == true && cb.fixable == 1}
+					{isFixAvailable() ?? ''}
+				{/if}
+			{/each}
+			{#if fixAvailable == true}
+				<p>Durch einen hover über die möglichkeiten, erhälst du informationen über die jeweillige Funktion</p>
+			{:else}
+				<p>Es sind keine fixes verfügbar</p>
+			{/if}
 
 			<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center">
 				<div class="flex flex-row flex-wrap justify-center text-center w-3/4 mx-auto self-center my-5" id="functionChecks">
@@ -222,8 +275,10 @@
 			</div>
 
 			<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center">
-				<Disclaimer content="Bei Rot angezeigten funktionen wird ein Fix angewendet" title="Deine ausgewählten Funktionen" color="warning" />
-				<div class="flex flex-row flex-wrap justify-center text-center mx-auto self-center my-5" id="functionChecks">
+				<div class="w-1/2 p-2">
+					<Disclaimer content="Bei Rot angezeigten funktionen wird ein Fix angewendet" title="Deine ausgewählten Funktionen" color="warning" />
+				</div>
+				<div class="flex flex-row flex-wrap justify-center text-center mx-auto self-center my-5 w-full" id="functionChecks">
 					{#each checkboxData as cb}
 						{#if cb.checked == true}
 							<div class=" p-4 w-1/3 m-2 {cb.fixActivated == true ? 'variant-ghost-secondary' : 'variant-ghost-primary'}">
@@ -234,8 +289,10 @@
 				</div>
 			</div>
 			<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center">
-				<h4 class="p-4">Generierter Code</h4>
-				<CodeBlock code={codeString} />
+				<h4 class="p-4 w-full">Generierter Code</h4>
+				<div class="w-1/2 p-4">
+					<CodeBlock shadow="shadow-xl" code={codeString} />
+				</div>
 			</div>
 		</div>
 		<div class="w-full flex flex-wrap flex-row justify-center p-4 space-x-2">

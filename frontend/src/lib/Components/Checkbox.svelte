@@ -33,6 +33,7 @@
 		props.forEach((checkbox) => {
 			if (checkbox.presets != undefined) {
 				let cbLabel = document.getElementById(checkbox.id + '-label');
+				let cbDiv = document.getElementById(checkbox.id + '-div');
 				if (checkbox.presets['' + preset] != undefined && checkbox.presets['' + preset] == true) {
 					console.log(checkbox);
 					checkbox.checked = checkstate == true ? true : false;
@@ -48,7 +49,7 @@
 						cbLabel.classList.remove('variant-ghost-primary');
 					}
 				} else {
-					/* 					cbLabel.classList.add('hidden'); */
+					cbDiv.classList.toggle('hidden');
 				}
 			}
 		});
@@ -64,7 +65,7 @@
 	}
 </script>
 
-<div class="w-{cbSize}">
+<div class="w-{cbSize}" id="{checkbox.id}-div">
 	<label
 		id="{checkbox.id}-label"
 		use:popup={popupHover}
