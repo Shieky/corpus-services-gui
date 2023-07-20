@@ -43,6 +43,7 @@ async function getCSVData(data: {}) {
 				dataType: element[6],
 				fixable: element[7],
 				fixActivated: false,
+				uniqueName: element[8] + '_' + element[6],
 				presets: {
 					hiat: element[0] == 'x' ? true : false,
 					gat: element[1] == 'x' ? true : false,
@@ -53,7 +54,7 @@ async function getCSVData(data: {}) {
 				}
 			};
 			// check if data key is == to id in csv
-			if (data[tmpObject.functionName] == tmpObject.functionName) {
+			if (data[tmpObject.uniqueName] == tmpObject.uniqueName) {
 				//only push if not already in array
 				if (!checkboxNames.includes(tmpObject)) {
 					checkboxNames.push(tmpObject);

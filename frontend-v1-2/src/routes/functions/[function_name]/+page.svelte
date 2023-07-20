@@ -2,10 +2,13 @@
 	import PresetCards from '$lib/PresetCards.svelte';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { checkboxNames } from '../../../states';
 	export let data;
 	let picekdPreset;
 	console.log(data);
-
+	$: {
+		checkboxNames.update((content) => [...content, 'test']);
+	}
 	let infoTexte = {
 		hiat: {
 			title: 'HIAT-CHECK',
@@ -53,7 +56,7 @@
 		>
 	</h5>
 </div>
-<button class="btn" on:click={() => console.log(data)}> CONSOLELOG </button>
+<button class="btn" on:click={() => console.log($checkboxNames)}> CONSOLELOG </button>
 <form action="fix?/fix" class="flex flex-col" method="post">
 	<div class="grid grid-cols-6 justify-center gap-3 md:p-4 mx-auto self-center">
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-1 row-span-2">

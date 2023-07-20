@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PresetCards from '$lib/PresetCards.svelte';
+	import { checkboxNames } from '../../../states';
 
 	export let data;
 	export let form;
@@ -16,11 +17,28 @@
 		Hier ein kleiner info-text was ein "fix" macht
 	</h5>
 </div>
-<button class="btn" on:click={() => console.log(data)}> CONSOLELOG </button>
+<button class="btn" on:click={() => console.log($checkboxNames)}> CONSOLELOG </button>
 <form action="" class="flex flex-col" method="post">
 	<div class="grid grid-cols-6 justify-center gap-3 md:p-4 mx-auto self-center">
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-1 row-span-2">
-			<PresetCards data={cbdata} header="FIXBARE FUNKTIONEN" dataType="fix" modalContent="" />
+			<PresetCards
+				data={cbdata}
+				fixMode={true}
+				header="FIXBARE FUNKTIONEN"
+				dataType="fix"
+				modalContent=""
+				checkedAndReadonly={false}
+			/>
+		</div>
+		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-3 row-span-2">
+			<PresetCards
+				data={cbdata}
+				fixMode={true}
+				header="NICHT FIXBARE FUNKTIONEN"
+				dataType="fix"
+				modalContent=""
+				checkedAndReadonly={true}
+			/>
 		</div>
 	</div>
 	<button

@@ -27,6 +27,7 @@ export const load = (async ({ params }) => {
 				dataType: element[6],
 				fixable: element[7],
 				fixActivated: false,
+				uniqueName: element[8] + '_' + element[6],
 				presets: {
 					hiat: element[0] == 'x' ? true : false,
 					gat: element[1] == 'x' ? true : false,
