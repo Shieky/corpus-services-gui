@@ -5,6 +5,7 @@
 	export let cbLabel = 'Checkbox Label';
 	export let tooltip = 'Tooltip';
 	export let id: string;
+	export let function_name: string;
 
 	export let checked: boolean;
 
@@ -29,7 +30,7 @@
 		class="flex items-center space-x-2 m-1 p-4 rounded-lg hover:variant-ghost-primary cursor-pointer transition-all self-center h-16 [&>*]:pointer-events-none
         {checked ? 'variant-ghost-primary' : 'variant-ghost'}"
 	>
-		<input bind:checked class="checkbox transition-all" type="checkbox" name={id} {id} />
+		<input bind:checked class="checkbox transition-all" type="checkbox" name={function_name} {id} />
 		<p>{cbLabel}</p>
 	</label>
 </div>

@@ -53,11 +53,12 @@
 		>
 	</h5>
 </div>
-<form action="fix" class="flex flex-col" method="post">
+<button class="btn" on:click={() => console.log(data)}> CONSOLELOG </button>
+<form action="fix?/fix" class="flex flex-col" method="post">
 	<div class="grid grid-cols-6 justify-center gap-3 md:p-4 mx-auto self-center">
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-1 row-span-2">
 			<PresetCards
-				{data}
+				data={data.data}
 				header="HIAT-CHECK"
 				dataType="hiat"
 				modalContent={infoTexte.hiat}
@@ -66,7 +67,7 @@
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-3 row-span-2">
 			<PresetCards
-				{data}
+				data={data.data}
 				header="GAT-CHECK"
 				dataType="gat"
 				modalContent={infoTexte.gat}
@@ -75,7 +76,7 @@
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-5 row-span-2">
 			<PresetCards
-				{data}
+				data={data.data}
 				header="TRANSKRIPT-CHECK"
 				dataType="transkript"
 				modalContent={infoTexte.transkript}
@@ -84,7 +85,7 @@
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-7 row-span-2">
 			<PresetCards
-				{data}
+				data={data.data}
 				header="HTML-CHECK"
 				dataType="html"
 				modalContent={infoTexte.html}
@@ -93,7 +94,7 @@
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-9 row-span-2">
 			<PresetCards
-				{data}
+				data={data.data}
 				header="KORPUS-CHECK"
 				dataType="korpus"
 				modalContent={infoTexte.korpus}
@@ -102,7 +103,7 @@
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-11 row-span-2">
 			<PresetCards
-				{data}
+				data={data.data}
 				header="META-CHECK"
 				dataType="meta"
 				isInPickedPreset={data.params.function_name == 'meta' ? true : false}

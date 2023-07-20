@@ -29,19 +29,20 @@
 	};
 	/* Set all for datatype checked values to true if isInPickedPreset is true */
 	if (isInPickedPreset) {
-		data.data.forEach((item) =>
+		data.forEach((item) =>
 			item.presets[dataType] == true ? (item.checked = true) : (item.checked = false)
 		);
-		console.log(data.data);
+		console.log(data);
 	}
 	function selectAll() {
-		data.data.forEach((item) => (item.checked = true));
-		data.data = [...data.data]; // Reassign to ensure Svelte's reactivity
+		data.forEach((item) => (item.checked = true));
+		data = [...data]; // Reassign to ensure Svelte's reactivity
 	}
 	function deselectAll() {
-		data.data.forEach((item) => (item.checked = false));
-		data.data = [...data.data]; // Reassign to ensure Svelte's reactivity
+		data.forEach((item) => (item.checked = false));
+		data = [...data]; // Reassign to ensure Svelte's reactivity
 	}
+	console.log(data);
 </script>
 
 <div
@@ -127,9 +128,10 @@
 		</div>
 		<!-- Checkboxes -->
 		<div class="flex flex-row flex-wrap w-full p-4 justify-center" id={dataType}>
-			{#each data.data as item}
+			{#each data as item}
 				{#if item.presets[dataType] == true}
 					<Checkbox
+						function_name={item.functionName}
 						tooltip={item.tooltip}
 						cbLabel={item.name}
 						id={item.id}
