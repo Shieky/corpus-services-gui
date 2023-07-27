@@ -7,7 +7,6 @@
 	export let tooltip = 'Tooltip';
 	export let id: string;
 	export let uniqueName: string;
-
 	export let checked: boolean;
 
 	export let isReadonly = false;
