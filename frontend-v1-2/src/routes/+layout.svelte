@@ -15,7 +15,7 @@
 <!-- App Shell -->
 <Modal padding="p-8" regionBody="max-h-[400px] variant-ghost rounded-2xl p-4" />
 <AppShell>
-	<svelte:fragment slot="header">
+	<!-- 	<svelte:fragment slot="header">
 		<AppBar slotDefault="place-self-center ">
 			<svelte:fragment slot="lead">
 				<a href="/" class="text-xl uppercase font-normal" />
@@ -25,7 +25,7 @@
 				<LightSwitch />
 			</svelte:fragment>
 		</AppBar>
-	</svelte:fragment>
+	</svelte:fragment> -->
 	<svelte:fragment slot="footer">
 		<div class="text-center text-gray-500 pt-4 text-xs mb-3 border-top-gradient">
 			<p>Made with ❤️ by Felicitaz</p>

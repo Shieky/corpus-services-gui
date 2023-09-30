@@ -19,10 +19,10 @@
 	};
 	export let header = 'Card Header';
 	export let data;
-	export let dataType = '';
+	export let dataType: string[];
 	export let modalContent = {};
-	export let isInPickedPreset = false;
 	export let fixMode = false;
+	export let comparingFunction = '';
 
 	export let checkedAndReadonly = false;
 
@@ -31,12 +31,11 @@
 		title: modalContent.title,
 		body: modalContent.content
 	};
-	/* Set all for datatype checked values to true if isInPickedPreset is true */
-	if (isInPickedPreset) {
+	if (comparingFunction != '') {
 		data.forEach((item) =>
-			item.presets[dataType] == true ? (item.checked = true) : (item.checked = false)
+			item.presets[comparingFunction] == true ? (item.checked = true) : (item.checked = false)
 		);
-		console.log(data);
+		//	console.log(data);
 	}
 	if (checkedAndReadonly) {
 		data.forEach((item) => (item.checked = true));
@@ -71,7 +70,7 @@
 	<div class="card-body overflow-hidden">
 		<div class="variant-soft overflow-hidden p-4 flex flex-row justify-between">
 			<div class="flex flex-row">
-				<h3 class="h3 overflow-hidden p-2">{header}</h3>
+				<h3 class="h3 overflow-hidden p-2 uppercase w-full inline-flex">{header}</h3>
 				{#if checkedAndReadonly == false}
 					<button
 						use:popup={popupHoverSelect}
@@ -148,12 +147,12 @@
 			</button>
 		</div>
 		<!-- Checkboxes -->
-		<div class="flex flex-row flex-wrap w-full p-4 justify-center" id={dataType}>
+		<div class="flex flex-row flex-wrap w-full p-4 justify-center" id={dataType[0]}>
 			{#if data.length == 0}
 				<p class="p-4">Keine Einträge vorhanden</p>
 			{/if}
 			{#each data as item}
-				{#if item.presets[dataType] == true || fixMode == true}
+				{#if dataType.includes(item.dataType) || fixMode}
 					<Checkbox
 						uniqueName={item.uniqueName}
 						tooltip={item.tooltip}

@@ -24,7 +24,7 @@ export const load = (async ({ params }) => {
 				checked: false,
 				visible: true,
 				functionName: element[8],
-				dataType: element[6],
+				dataType: element[6].toUpperCase(),
 				fixable: element[7],
 				fixActivated: false,
 				uniqueName: element[8] + '_' + element[6],

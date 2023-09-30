@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import PresetCards from '$lib/PresetCards.svelte';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
@@ -40,82 +40,120 @@
 				'Die Korpus-Aufbereitung umfasst alle Funktionen, die der Verbesserung der Transkriptqualität dienen oder formale Prüfungen und Korrekturen des Korpusmanagers (COMA) enthalten. Die Korpus-Aufbereitung hilft bei der Qualitätsprüfung vor der Veröffentlichung eines Korpus. Einfache Fehler (bspw. Segmentierungsfehler in den Transkripten oder absolute Dateipfade in der COMA-Datei) werden automatisch korrigiert. Fehler, für die eine manuelle Korrektur erforderlich ist, werden in einem Report dokumentiert.'
 		}
 	};
+
+	function selectAll(presetName: string) {
+		data.data.forEach((item) => {
+			if (item.presets[presetName] == true) item.checked = true;
+		});
+		data.data = [...data.data]; // Reassign to ensure Svelte's reactivity
+	}
+	function deselectAll() {
+		data.data.forEach((item) => (item.checked = false));
+		data.data = [...data.data]; // Reassign to ensure Svelte's reactivity
+	}
 </script>
 
 <div
-	class="flex flex-col flex-wrap justify-center items-center"
+	class="flex flex-col flex-wrap justify-center items-center w-full space-y-10 my-10"
 	transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
 >
-	<h1 class="h1 p-4">Welche Funktionen möchtest du durchführen?</h1>
-	<h5 class="h5 p-4 w-1/2 border border-dashed border-primary-500 text-center">
-		Über den <b class="font-bold underline">Info-Button</b> kannst du dir eine Beschreibung der
-		presets anzeigen lassen.<br />
-		<sup
-			>Durch einen hover über die möglichkeiten, erhälst du informationen über die jeweillige
-			Funktion</sup
-		>
+	<h1 class="h1 p-4 w-full text-center">Welche Funktionen möchtest du auswählen?</h1>
+	<h5 class="h5 p-4 w-1/2 variant-glass-tertiary text-center border border-secondary-400">
+		Über die Buttons kannst du den vorausgewählten Funktionssets wechseln oder die Auswahl
+		zurücksetzen. Bei einer individuellen Funktionsauswahl kann dir die Vorsortierung der Funktionen
+		helfen. Über das (i) hinter den Funktionen kannst du dir eine Beschreibung anzeigen lassen. Alle
+		Funktionen können entweder eine Prüfung durchführen und einen Report dazu ausgeben oder eine
+		Visualisierung (o.ä.) erstellen. Einige Funktionen können zusätzlich Korrekturen („Fixes“)
+		durchführen. Ob eine hier angewählte Funktion nur eine Prüfung oder auch eine Korrektur
+		durchführen soll, kann im nächsten Schritt ausgewählt werden.
 	</h5>
 </div>
-<button class="btn" on:click={() => console.log($checkboxNames)}> CONSOLELOG </button>
+<div class="flex flex-col justify-center w-full space-y-5">
+	<div class=" p-4 w-1/2 self-center border-b border-secondary-400">
+		<h3 class="h3 text-center">Presets</h3>
+	</div>
+	<div class="flex flex-row flex-wrap justify-center self-center w-full rounded-2xl">
+		<button
+			type="button"
+			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
+			on:click={() => selectAll('hiat')}>HIAT-CHECK</button
+		>
+		<button
+			type="button"
+			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
+			on:click={() => selectAll('gat')}>GAT-CHECK</button
+		>
+		<button
+			type="button"
+			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
+			on:click={() => selectAll('transkript')}>TRANSKRIPT-CHECK</button
+		>
+		<button
+			type="button"
+			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
+			on:click={() => selectAll('korpus')}>KORPUS-AUSBEREITUNG</button
+		>
+		<button
+			type="button"
+			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
+			on:click={() => selectAll('meta')}>METADATEN-CHECK</button
+		>
+		<button
+			type="button"
+			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
+			on:click={() => selectAll('html')}>HTML-ANSICHTEN</button
+		>
+		<div class="w-full flex flex-col justify-center">
+			<button
+				type="button"
+				class="w-max self-center btn btn-md variant-glass border border-secondary-500 hover:variant-glass-secondary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
+				on:click={() => deselectAll()}>AUSWAHL ZURÜCKSETZEN</button
+			>
+		</div>
+	</div>
+</div>
 <form action="fix?/fix" class="flex flex-col" method="post">
 	<div class="grid grid-cols-6 justify-center gap-3 md:p-4 mx-auto self-center">
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-1 row-span-2">
 			<PresetCards
 				data={data.data}
-				header="HIAT-CHECK"
-				dataType="hiat"
+				header="Transkript-Funktionen (EXB, EXS)"
+				dataType={['BASICTRANSCRIPTIONDATA', 'SEGMENTEDTRANSCRIPTIONDATA']}
 				modalContent={infoTexte.hiat}
-				isInPickedPreset={data.params.function_name == 'hiat' ? true : false}
+				comparingFunction={data.params.function_name}
 			/>
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-3 row-span-2">
 			<PresetCards
 				data={data.data}
-				header="GAT-CHECK"
-				dataType="gat"
+				header="Korpusmanager-Funktionen (COMA)"
+				dataType={['COMADATA']}
 				modalContent={infoTexte.gat}
-				isInPickedPreset={data.params.function_name == 'gat' ? true : false}
+				comparingFunction={data.params.function_name}
 			/>
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-5 row-span-2">
 			<PresetCards
 				data={data.data}
-				header="TRANSKRIPT-CHECK"
-				dataType="transkript"
+				header="Metadaten-Funktionen (CMDI)"
+				dataType={['CMDIDATA']}
 				modalContent={infoTexte.transkript}
-				isInPickedPreset={data.params.function_name == 'transkript' ? true : false}
+				comparingFunction={data.params.function_name}
 			/>
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-7 row-span-2">
 			<PresetCards
 				data={data.data}
-				header="HTML-CHECK"
-				dataType="html"
+				header="Andere (div.)"
+				dataType={['GENERAL', 'UNSPECIFIEDXMLDATA']}
 				modalContent={infoTexte.html}
-				isInPickedPreset={data.params.function_name == 'html' ? true : false}
-			/>
-		</div>
-		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-9 row-span-2">
-			<PresetCards
-				data={data.data}
-				header="KORPUS-CHECK"
-				dataType="korpus"
-				modalContent={infoTexte.korpus}
-				isInPickedPreset={data.params.function_name == 'korpus' ? true : false}
-			/>
-		</div>
-		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-11 row-span-2">
-			<PresetCards
-				data={data.data}
-				header="META-CHECK"
-				dataType="meta"
-				isInPickedPreset={data.params.function_name == 'meta' ? true : false}
+				comparingFunction={data.params.function_name}
 			/>
 		</div>
 	</div>
 	<button
 		type="submit"
-		class="btn btn-lg variant-filled hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
+		class="btn btn-md variant-glass border border-primary hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
 		>Weiter</button
 	>
 </form>

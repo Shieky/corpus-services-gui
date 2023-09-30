@@ -3,7 +3,7 @@
 	import { fade, slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { CodeBlock } from '@skeletonlabs/skeleton';
-
+	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 	export let data;
 	export let form;
 	let cbdata = form?.data.data;
@@ -30,26 +30,21 @@
 	}
 </script>
 
-<div
-	class="flex flex-col flex-wrap justify-center items-center"
-	transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
->
-	<h1 class="h1 p-4">Welche der ausgewählten Funktionen soll einen Fix bekommen?</h1>
-	<h5 class="h5 p-4 w-1/2 border border-dashed border-primary-500 text-center">
-		{#if !responseIsOk}
-			<span in:fade={{ delay: 50, duration: 300 }}>
-				Hier ein kleiner info-text was ein "fix" macht</span
-			>
-		{:else}
-			<span in:fade={{ delay: 50, duration: 300 }}
-				>Wähle nun deine Dateien aus die Bearbeitet werden sollen.<br />
-				<sub>Den generierten Code welcher ausgeführt wird siehst du in dem Kasten.</sub></span
-			>
-		{/if}
-	</h5>
-</div>
 <!-- <form action="finish?/upload" class="flex flex-col" method="post"> -->
 {#if !responseIsOk}
+	<div
+		class="flex flex-col flex-wrap justify-center items-center my-10 space-y-10"
+		transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+	>
+		<h1 class="h1 p-4">Welche der ausgewählten Funktionen soll eine Korrektur ausführen?</h1>
+		<h5 class="h5 p-4 w-1/2 variant-glass-tertiary text-center border border-secondary-400">
+			<span in:fade={{ delay: 50, duration: 300 }}>
+				Hier kannst du erkennen, ob von dir ausgewählte Funktionen auch eine Korrektur durchführen
+				können, und diese entsprechend anwählen. Über das (i) erhältst du eine kurze Beschreibung,
+				welche Korrekturen mithilfe der Funktion durchgeführt werden.
+			</span>
+		</h5>
+	</div>
 	<form
 		on:submit|preventDefault={handleSubmit}
 		class="flex flex-col"
@@ -60,7 +55,7 @@
 				<PresetCards
 					data={cbdata}
 					fixMode={true}
-					header="FIXBARE FUNKTIONEN"
+					header="Korrektur-FUNKTIONEN"
 					dataType="fix"
 					modalContent=""
 					checkedAndReadonly={false}
@@ -70,7 +65,7 @@
 				<PresetCards
 					data={cbdata}
 					fixMode={true}
-					header="NICHT FIXBARE FUNKTIONEN"
+					header="Ausgewählte Funktionen (Prüfung/Visualisierung)"
 					dataType="fix"
 					modalContent=""
 					checkedAndReadonly={true}
@@ -84,6 +79,26 @@
 		>
 	</form>
 {:else}
+	<div
+		class="flex flex-col flex-wrap justify-center items-center my-10 space-y-10"
+		transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+	>
+		<h1 class="h1 p-4">Dateien Auswählen und Hochladen</h1>
+		<h5 class="h5 p-4 w-1/2 variant-glass-tertiary text-center border border-secondary-400">
+			<span in:fade={{ delay: 50, duration: 300 }}>
+				Hier kannst du die Dateien hochladen, auf die die ausgewählten Funktionen angewendet werden
+				sollen.<br />
+			</span>
+			<span in:fade={{ delay: 50, duration: 300 }}>
+				<sub class="leading-[1px]"
+					>Die Dateien werden nur für die Dauer der Prüfung gespeichert und anschließend sofort
+					wieder gelöscht. Falls du dennoch Bedenken hast, kannst du den generierten Code nutzen, um
+					die Corpus Services bei dir lokal auszuführen (Achtung: Die Corpus Services können nur
+					über die Konsole ausgeführt werden und haben keine grafische Oberfläche).</sub
+				></span
+			>
+		</h5>
+	</div>
 	<form
 		on:submit|preventDefault
 		class="flex flex-col"
@@ -117,10 +132,20 @@
 			</div>
 		</div>
 		<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center text-center">
-			<h4 class="p-4 w-full self-center">Generierter Code</h4>
-			<div class="w-3/4 p-4">
-				<CodeBlock color="white" rounded="rounded" shadow="shadow-xl" code={codeString} />
-			</div>
+			<Accordion width="w-3/4">
+				<AccordionItem>
+					<svelte:fragment slot="summary">Generierter Code</svelte:fragment>
+					<div
+						class="w-full flex flex-wrap flex-row justify-center mx-auto self-center text-center"
+						slot="content"
+					>
+						<h4 class="p-4 w-full self-center">Generierter Code</h4>
+						<div class="w-full p-4">
+							<CodeBlock color="white" rounded="rounded" shadow="shadow-xl" code={codeString} />
+						</div>
+					</div>
+				</AccordionItem>
+			</Accordion>
 		</div>
 		<button
 			on:click={() => (responseIsOk = false)}
