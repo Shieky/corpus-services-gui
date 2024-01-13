@@ -15,6 +15,7 @@ export const load = (async ({ params }) => {
 	});
 	let checkboxNames = [];
 	let tmpObject = {};
+	/* The presets are built through an CSV file, which is provided in the resources folder */
 	results.forEach((element, index) => {
 		if (element[9] != '' && element[9] != undefined && index != 0) {
 			tmpObject = {

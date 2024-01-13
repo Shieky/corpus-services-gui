@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Papa from 'papaparse';
 import type { PageServerLoad, Actions } from './$types';
+import { fail } from '@sveltejs/kit';
 
 export const actions: Actions = {
 	fix: async ({ request }) => {
@@ -18,7 +19,7 @@ export const actions: Actions = {
 		};
 	}
 };
-
+/* The presets are built through an CSV file, which is provided in the resources folder */
 async function getCSVData(data: {}) {
 	const filePath = path.join(process.cwd(), '/resources/', 'corpus-funktionen.csv');
 	const fileContents = fs.readFileSync(filePath, 'utf-8');

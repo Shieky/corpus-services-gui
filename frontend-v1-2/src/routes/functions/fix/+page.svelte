@@ -4,12 +4,15 @@
 	import { quintOut } from 'svelte/easing';
 	import { CodeBlock } from '@skeletonlabs/skeleton';
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
+	import { enhance } from '$app/forms';
 	export let data;
 	export let form;
 	let cbdata = form?.data.data;
-	console.log(cbdata);
+	//console.log(cbdata);
+
 	let codeString = '';
 	let responseIsOk = false;
+	let internalCodeString = '';
 	async function handleSubmit() {
 		const response = await fetch('/functions/finish', {
 			method: 'POST',
@@ -22,8 +25,10 @@
 		if (response.ok) {
 			const jsonResponse = await response.json();
 			responseIsOk = true;
-			codeString = jsonResponse;
-			console.log(jsonResponse);
+			codeString = jsonResponse.codeString;
+			internalCodeString = jsonResponse.internalCodeString;
+			/* 			console.log(codeString);
+			console.log(internalCodeString); */
 		} else {
 			console.log('HTTP-Error: ' + response.status);
 		}
@@ -100,7 +105,10 @@
 		</h5>
 	</div>
 	<form
-		on:submit|preventDefault
+		use:enhance
+		method="post"
+		action="finish?/upload"
+		enctype="multipart/form-data"
 		class="flex flex-col"
 		transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
 	>
@@ -110,27 +118,28 @@
 				class="w-1/2 self-center flex flex-row justify-center mx-auto p-4 variant-ringed-primary"
 			>
 				<p class="self-center font-bold px-4 w-1/2">EXB/EXS Datei(en)</p>
-				<input class=" w-1/2" id="exb-files" type="file" multiple />
+				<input class=" w-1/2" id="exb_files" name="exb_files" type="file" multiple />
 			</div>
 			<div
 				class="w-1/2 self-center flex flex-row justify-center mx-auto p-4 variant-ringed-primary"
 			>
 				<p class="self-center font-bold px-4 w-1/2">COMA Datei(en)</p>
-				<input class=" w-1/2" id="exb-files" type="file" multiple />
+				<input class=" w-1/2" id="coma_files" name="coma_files" type="file" multiple />
 			</div>
 			<div
 				class="w-1/2 self-center flex flex-row justify-center mx-auto p-4 variant-ringed-primary"
 			>
 				<p class="self-center font-bold px-4 w-1/2">Sonstige Datei(en)</p>
-				<input class=" w-1/2" id="exb-files" type="file" multiple />
+				<input class=" w-1/2" id="misc_-files" name="misc_files" type="file" multiple />
 			</div>
-			<div
+			<!-- 			<div
 				class="w-1/2 self-center flex flex-row justify-center mx-auto p-4 variant-ringed-primary"
 			>
 				<p class="self-center font-bold px-4 w-1/2">Ordner als ZIP</p>
 				<input class=" w-1/2" id="exb-files" type="file" />
-			</div>
+			</div> -->
 		</div>
+		<input type="hidden" name="internalCode" value={internalCodeString} />
 		<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center text-center">
 			<Accordion width="w-3/4">
 				<AccordionItem>
@@ -147,10 +156,17 @@
 				</AccordionItem>
 			</Accordion>
 		</div>
-		<button
-			on:click={() => (responseIsOk = false)}
-			class="btn btn-lg variant-filled hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
-			>Zurück</button
-		>
+		<div class="flex flex-row w-full">
+			<button
+				on:click={() => (responseIsOk = false)}
+				class="btn btn-lg variant-filled-warning hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
+				>Zurück</button
+			>
+			<button
+				type="submit"
+				class="btn btn-lg variant-filled-primary hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
+				>Hochladen</button
+			>
+		</div>
 	</form>
 {/if}
