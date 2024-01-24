@@ -5,6 +5,7 @@
 	import { CodeBlock } from '@skeletonlabs/skeleton';
 	import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
 	import { enhance } from '$app/forms';
+	import { ProgressBar } from '@skeletonlabs/skeleton';
 	export let data;
 	export let form;
 	let cbdata = form?.data.data;
@@ -13,6 +14,7 @@
 	let codeString = '';
 	let responseIsOk = false;
 	let internalCodeString = '';
+	let formLoading = false;
 	async function handleSubmit() {
 		const response = await fetch('/functions/finish', {
 			method: 'POST',
@@ -33,6 +35,23 @@
 			console.log('HTTP-Error: ' + response.status);
 		}
 	}
+	async function download(uri:string) {
+	// get zip file from endpoint
+	let res = await fetch(`${uri}`, {
+		method: 'GET',
+	});
+	let blob = await res.blob();
+	var url = window.URL || window.webkitURL;
+	let link = url.createObjectURL(blob);
+
+    // generate anchor tag, click it for download and then remove it again
+	let a = document.createElement("a");
+	a.setAttribute("download", `corpus.zip`);
+	a.setAttribute("href", link);
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+}
 </script>
 
 <!-- <form action="finish?/upload" class="flex flex-col" method="post"> -->
@@ -105,7 +124,19 @@
 		</h5>
 	</div>
 	<form
-		use:enhance
+	use:enhance={() => {
+		formLoading = true;
+		return async ({ update, result, formData }) => {
+			formLoading = false;
+			// download returned zip file
+			const downloadUri = await result?.data.body;
+
+			if (downloadUri != undefined) {
+				download(downloadUri);
+			}
+			update();
+		};
+	}}
 		method="post"
 		action="finish?/upload"
 		enctype="multipart/form-data"
@@ -156,17 +187,29 @@
 				</AccordionItem>
 			</Accordion>
 		</div>
-		<div class="flex flex-row w-full">
+		<div class="flex flex-row w-full justify-center">
+			{#if !formLoading}
 			<button
 				on:click={() => (responseIsOk = false)}
 				class="btn btn-lg variant-filled-warning hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
 				>Zurück</button
 			>
+
 			<button
 				type="submit"
 				class="btn btn-lg variant-filled-primary hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
 				>Hochladen</button
 			>
+			{:else}
+			<div class="w-1/2 self-center space-y-10 flex flex-col justify-center" in:fade={{ delay: 50, duration: 300 }}>
+				<h5 class="h5 p-4 variant-glass-tertiary text-center border border-secondary-400">
+					Deine Dateien werden hochgeladen und verarbeitet - dies kann je nach Dateigröße und Uploadgeschwindigkeit einige Minuten dauern.
+				</h5>
+				<ProgressBar />
+			</div>
+
+
+			{/if}
 		</div>
 	</form>
 {/if}
