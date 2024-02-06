@@ -62,7 +62,7 @@
 			}}
 		/>
 	</div>
-	<div class="col-span-2 col-start-1 row-start-8 row-span-6">
+	<div class="col-span-2 col-start-1 row-start-9 row-span-6">
 		<Card
 			cardHeader="KORPUS-AUFBEREITUNG"
 			cardBody="Korpus Aufbereiten und bereinigen"
@@ -86,7 +86,7 @@
 			}}
 		/>
 	</div>
-	<div class="col-span-2 col-start-4 row-start-8 row-span-6">
+	<div class="col-span-2 col-start-4 row-start-9 row-span-6">
 		<Card
 			cardHeader="METADATEN-CHECK"
 			cardBody="Metadaten prüfen und korrigieren"
@@ -97,7 +97,7 @@
 			}}
 		/>
 	</div>
-	<div class="col-span-6 col-start-1 row-start-8 row-span-6">
+	<div class="col-span-5 col-start-1 row-start-14 row-span-6">
 		<Card
 			cardHeader="EIGENE AUSWAHL"
 			cardBody="Funktionen individuell und ohne Vorauswahl auswählen"

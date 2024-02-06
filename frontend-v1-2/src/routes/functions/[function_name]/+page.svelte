@@ -58,7 +58,7 @@
 	transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
 >
 	<h1 class="h1 p-4 w-full text-center">Welche Funktionen möchtest du auswählen?</h1>
-	<h5 class="h5 p-4 w-1/2 variant-glass-tertiary text-center border border-secondary-400">
+	<h5 class="h5 p-4 w-1/2 shadow-md variant-glass-tertiary text-center border border-secondary-400">
 		Über die Buttons kannst du den vorausgewählten Funktionssets wechseln oder die Auswahl
 		zurücksetzen. Bei einer individuellen Funktionsauswahl kann dir die Vorsortierung der Funktionen
 		helfen. Über das (i) hinter den Funktionen kannst du dir eine Beschreibung anzeigen lassen. Alle
@@ -112,7 +112,7 @@
 		</div>
 	</div>
 </div>
-<form action="fix?/fix" class="flex flex-col" method="post">
+<form action="/functions/fix?/fix" class="flex flex-col" method="post">
 	<div class="grid grid-cols-6 justify-center gap-3 md:p-4 mx-auto self-center">
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-1 row-span-2">
 			<PresetCards
