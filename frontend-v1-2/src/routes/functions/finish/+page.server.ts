@@ -67,12 +67,18 @@ export const actions: Actions = {
 				},
 				body: {
 					zipName: zipName,
-					log: corpusResponse.log,
-					errorLog: corpusResponse.errorLog
+					log: corpusResponse.log['log'],
+					errorLog: corpusResponse.log['errorLog']
 				}
 			};
 		} catch (err) {
-			console.error(err);
+			console.log('RETURNING ERROR LOG');
+			return {
+				status: 500,
+				body: {
+					errorLog: err.message
+				}
+			};
 		}
 		// return { success: true };
 	}
@@ -164,7 +170,7 @@ function runCorpusServices(corpusServicesPath: string, tmpDir: string, code: str
 
 		let log = '';
 		let errorLog = '';
-
+		let logArray: string[] = [];
 		child.stdout.on('data', (data) => {
 			console.log(`stdout: ${data}`);
 			log += data;
@@ -176,9 +182,11 @@ function runCorpusServices(corpusServicesPath: string, tmpDir: string, code: str
 		});
 
 		child.on('close', (code) => {
+			logArray['log'] = log;
+			logArray['errorLog'] = errorLog;
 			console.log(`child process exited with code ${code}`);
 			if (code === 0) {
-				resolve(log); // Resolve the promise successfully with the log
+				resolve(logArray); // Resolve the promise successfully with the log
 			} else {
 				reject(new Error(`Child process exited with code ${code}\nError Log: ${errorLog}`)); // Reject the promise with the error log
 			}
