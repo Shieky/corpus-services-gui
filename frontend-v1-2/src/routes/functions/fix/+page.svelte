@@ -15,6 +15,15 @@
 	let responseIsOk = false;
 	let internalCodeString = '';
 	let formLoading = false;
+	let logString = '';
+	let errorlogString = '';
+	$: logString = '';
+	$: errorlogString = '';
+	let taskCompleted = false;
+	let tasknotFailed = true;
+	let fileDownloadUri = '';
+	let files: FileList;
+
 	async function handleSubmit() {
 		const response = await fetch('/functions/finish', {
 			method: 'POST',
@@ -35,34 +44,23 @@
 			console.log('HTTP-Error: ' + response.status);
 		}
 	}
-	async function download(uri:string) {
-	// get zip file from endpoint
-	let res = await fetch(`${uri}`, {
-		method: 'GET',
-	});
-	let blob = await res.blob();
-	var url = window.URL || window.webkitURL;
-	let link = url.createObjectURL(blob);
-
-    // generate anchor tag, click it for download and then remove it again
-	let a = document.createElement("a");
-	a.setAttribute("download", `corpus.zip`);
-	a.setAttribute("href", link);
-	document.body.appendChild(a);
-	a.click();
-	document.body.removeChild(a);
-}
+	function onChangeHandler(e: Event): void {
+		console.log('ONCHANGE');
+		console.log('file data:', e);
+	}
 </script>
 
 <!-- <form action="finish?/upload" class="flex flex-col" method="post"> -->
 {#if !responseIsOk}
 	<div
 		class="flex flex-col flex-wrap justify-center items-center my-10 space-y-10"
-		transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+		in:fade={{ delay: 100, duration: 300 }}
 	>
 		<h1 class="h1 p-4">Welche der ausgewählten Funktionen soll eine Korrektur ausführen?</h1>
-		<h5 class="h5 p-4 w-1/2 variant-glass-tertiary text-center border border-secondary-400">
-			<span in:fade={{ delay: 50, duration: 300 }}>
+		<h5
+			class="h5 p-4 w-1/2 variant-glass-tertiary text-center outline outline-offset-8 outline-secondary-500 border-secondary-400"
+		>
+			<span in:fade={{ delay: 100, duration: 300 }}>
 				Hier kannst du erkennen, ob von dir ausgewählte Funktionen auch eine Korrektur durchführen
 				können, und diese entsprechend anwählen. Über das (i) erhältst du eine kurze Beschreibung,
 				welche Korrekturen mithilfe der Funktion durchgeführt werden.
@@ -72,7 +70,7 @@
 	<form
 		on:submit|preventDefault={handleSubmit}
 		class="flex flex-col"
-		transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+		in:fade={{ delay: 100, duration: 300 }}
 	>
 		<div class="grid grid-cols-6 justify-center gap-3 md:p-4 mx-auto self-center">
 			<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-1 row-span-2">
@@ -105,15 +103,17 @@
 {:else}
 	<div
 		class="flex flex-col flex-wrap justify-center items-center my-10 space-y-10"
-		transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+		in:fade={{ delay: 100, duration: 300 }}
 	>
 		<h1 class="h1 p-4">Dateien Auswählen und Hochladen</h1>
-		<h5 class="h5 p-4 w-1/2 variant-glass-tertiary text-center border border-secondary-400">
-			<span in:fade={{ delay: 50, duration: 300 }}>
+		<h5
+			class="h5 p-4 w-1/2 variant-glass-tertiary text-center outline outline-offset-8 outline-secondary-500 border-secondary-400"
+		>
+			<span in:fade={{ delay: 100, duration: 300 }}>
 				Hier kannst du die Dateien hochladen, auf die die ausgewählten Funktionen angewendet werden
 				sollen.<br />
 			</span>
-			<span in:fade={{ delay: 50, duration: 300 }}>
+			<span in:fade={{ delay: 100, duration: 300 }}>
 				<sub class="leading-[1px]"
 					>Die Dateien werden nur für die Dauer der Prüfung gespeichert und anschließend sofort
 					wieder gelöscht. Falls du dennoch Bedenken hast, kannst du den generierten Code nutzen, um
@@ -124,34 +124,98 @@
 		</h5>
 	</div>
 	<form
-	use:enhance={() => {
-		formLoading = true;
-		return async ({ update, result, formData }) => {
-			formLoading = false;
-			// download returned zip file
-			const downloadUri = await result?.data.body;
+		use:enhance={() => {
+			formLoading = true;
+			return async ({ update, result, formData }) => {
+				if (result?.data.status != '500') {
+					formLoading = false;
+					const body = await result?.data.body;
+					console.log(body);
+					const downloadUri = body?.zipName;
+					const log = body?.log;
+					const errLog = body?.errorLog;
+					logString = log;
+					errorlogString = errLog;
+					fileDownloadUri = downloadUri;
+					//console.log(logString);
+					// console.log(downloadUri);
+					/* run get function */
+					const res = await fetch(`/functions/finish?file=${downloadUri}`, {
+						method: 'GET'
+					});
+					if (res.ok) {
+						// Create a blob from the response
+						const blob = await res.blob();
+						// Create a link element
+						const link = document.createElement('a');
+						link.href = window.URL.createObjectURL(blob);
+						link.download = 'corpus.zip';
 
-			if (downloadUri != undefined) {
-				download(downloadUri);
-			}
-			update();
-		};
-	}}
+						// Append to the document and trigger the download
+						document.body.appendChild(link);
+						link.click();
+
+						// Clean up by removing the link element
+						document.body.removeChild(link);
+					} else {
+						console.error('Fetch error:', res.statusText);
+					}
+					taskCompleted = true;
+				} else {
+					formLoading = false;
+					const body = await result?.data.body;
+					const log = body?.errorLog;
+					// console.log(log);
+					errorlogString = log;
+					taskCompleted = true;
+					tasknotFailed = false;
+				}
+				update();
+			};
+		}}
 		method="post"
 		action="finish?/upload"
 		enctype="multipart/form-data"
 		class="flex flex-col"
-		transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+		in:fade={{ delay: 100, duration: 300 }}
 	>
-		<div class="flex flex-col flex-wrap justify-center p-4 space-y-2">
+		<div class="flex flex-row flex-wrap p-4 justify-center items-center space-x-4">
 			<!-- <label for="exb-files">EXB/EXS Datei(en)</label> -->
-			<div
-				class="w-1/2 self-center flex flex-row justify-center mx-auto p-4 variant-ringed-primary"
-			>
-				<p class="self-center font-bold px-4 w-1/2">EXB/EXS Datei(en)</p>
-				<input class=" w-1/2" id="exb_files" name="exb_files" type="file" multiple />
+			<div class="w-3/12 card rounded-md">
+				<div class="card-body overflow-hidden flex flex-col space-y-5 justify-center items-center">
+					<div class="w-full variant-glass-primary rounded-md">
+						<p class="self-center font-bold px-4 w-full text-xl p-4 text-center">
+							EXB/EXS Datei(en)
+						</p>
+					</div>
+					<div class="w-full p-4 pb-8">
+						<input class="" id="exb_files" name="exb_files" type="file" multiple />
+					</div>
+				</div>
 			</div>
-			<div
+			<div class="w-3/12 card rounded-md">
+				<div class="card-body overflow-hidden flex flex-col space-y-5 justify-center items-center">
+					<div class="w-full variant-glass-primary rounded-md">
+						<p class="self-center font-bold px-4 w-full text-xl p-4 text-center">COMA Datei(en)</p>
+					</div>
+					<div class="w-full p-4 pb-8">
+						<input class="" id="coma_files" name="coma_files" type="file" multiple />
+					</div>
+				</div>
+			</div>
+			<div class="w-3/12 card rounded-md">
+				<div class="card-body overflow-hidden flex flex-col space-y-5 justify-center items-center">
+					<div class="w-full variant-glass-primary rounded-md">
+						<p class="self-center font-bold px-4 w-full text-xl p-4 text-center">
+							Sonstige Datei(en)
+						</p>
+					</div>
+					<div class="w-full p-4 pb-8">
+						<input class="" id="misc_files" name="misc_files" type="file" multiple />
+					</div>
+				</div>
+			</div>
+			<!-- <div
 				class="w-1/2 self-center flex flex-row justify-center mx-auto p-4 variant-ringed-primary"
 			>
 				<p class="self-center font-bold px-4 w-1/2">COMA Datei(en)</p>
@@ -162,7 +226,7 @@
 			>
 				<p class="self-center font-bold px-4 w-1/2">Sonstige Datei(en)</p>
 				<input class=" w-1/2" id="misc_-files" name="misc_files" type="file" multiple />
-			</div>
+			</div> -->
 			<!-- 			<div
 				class="w-1/2 self-center flex flex-row justify-center mx-auto p-4 variant-ringed-primary"
 			>
@@ -180,6 +244,7 @@
 						slot="content"
 					>
 						<h4 class="p-4 w-full self-center">Generierter Code</h4>
+
 						<div class="w-full p-4">
 							<CodeBlock color="white" rounded="rounded" shadow="shadow-xl" code={codeString} />
 						</div>
@@ -187,29 +252,104 @@
 				</AccordionItem>
 			</Accordion>
 		</div>
-		<div class="flex flex-row w-full justify-center">
-			{#if !formLoading}
-			<button
-				on:click={() => (responseIsOk = false)}
-				class="btn btn-lg variant-filled-warning hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
-				>Zurück</button
-			>
+		{#if taskCompleted}
+			{#if logString != ''}
+				<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center">
+					<Accordion width="w-3/4">
+						<AccordionItem>
+							<svelte:fragment slot="summary">Corpus logs</svelte:fragment>
+							<div
+								class="w-full flex flex-wrap flex-row justify-center mx-auto self-center"
+								slot="content"
+							>
+								<h4 class="p-4 w-full self-center">Log von Corpus services</h4>
 
-			<button
-				type="submit"
-				class="btn btn-lg variant-filled-primary hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
-				>Hochladen</button
-			>
-			{:else}
-			<div class="w-1/2 self-center space-y-10 flex flex-col justify-center" in:fade={{ delay: 50, duration: 300 }}>
-				<h5 class="h5 p-4 variant-glass-tertiary text-center border border-secondary-400">
-					Deine Dateien werden hochgeladen und verarbeitet - dies kann je nach Dateigröße und Uploadgeschwindigkeit einige Minuten dauern.
-				</h5>
-				<ProgressBar />
-			</div>
-
-
+								<div class="w-full p-4">
+									<CodeBlock color="white" rounded="rounded" shadow="shadow-xl" code={logString} />
+								</div>
+							</div>
+						</AccordionItem>
+					</Accordion>
+				</div>
 			{/if}
+			{#if errorlogString != ''}
+				<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center">
+					<Accordion width="w-3/4">
+						<AccordionItem>
+							<svelte:fragment slot="summary">Corpus logs - Fehler</svelte:fragment>
+							<div
+								class="w-full flex flex-wrap flex-row justify-center mx-auto self-center"
+								slot="content"
+							>
+								<h4 class="p-4 w-full self-center">Fehler von den Corpus services</h4>
+
+								<div class="w-full p-4">
+									<CodeBlock
+										color="white"
+										rounded="rounded"
+										shadow="shadow-xl"
+										code={errorlogString}
+									/>
+								</div>
+							</div>
+						</AccordionItem>
+					</Accordion>
+				</div>
+			{/if}
+		{/if}
+		<div class="flex flex-row w-full lg:w-3/4 justify-center items-center self-center">
+			<div class="flex flex-col w-full justify-center">
+				{#if !formLoading}
+					{#if !taskCompleted}
+						<div
+							class="flex flex-row self-center justify-center items-center w-1/2"
+							in:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+						>
+							<button
+								on:click={(e) => {
+									e.preventDefault();
+									responseIsOk = false;
+								}}
+								class="btn btn-lg variant-filled-warning hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
+								>Zurück</button
+							>
+							<button
+								type="submit"
+								class="btn btn-lg variant-filled-primary hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
+								>Hochladen</button
+							>
+						</div>
+					{/if}
+				{:else}
+					<div
+						class="w-1/2 self-center space-y-10 flex flex-col justify-center"
+						in:fade={{ delay: 100, duration: 300 }}
+					>
+						<h5 class="h5 p-4 variant-glass-tertiary text-center border border-secondary-400">
+							Deine Dateien werden hochgeladen und verarbeitet - dies kann je nach Dateigröße und
+							Uploadgeschwindigkeit einige Minuten dauern.
+						</h5>
+						<ProgressBar />
+					</div>
+				{/if}
+				{#if taskCompleted && tasknotFailed}
+					<h5 class="h5 p-4 variant-glass-tertiary text-center border border-primary-400">
+						Deine Dateien wurden erfolgreich verarbeitet
+					</h5>
+					<a
+						href="/functions/finish?file={fileDownloadUri}"
+						download="corpus.zip"
+						type="submit"
+						class="btn btn-lg variant-filled-primary hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
+						>Verarbeitete Dateien Herunterladen</a
+					>
+				{/if}
+				{#if taskCompleted && !tasknotFailed}
+					<h5 class="h5 p-4 variant-glass-error text-center border border-primary-400">
+						Deine Dateien konnten nicht verarbeitet werden. Bitte überprüfe die Log-Datei.
+					</h5>
+				{/if}
+			</div>
 		</div>
 	</form>
 {/if}
