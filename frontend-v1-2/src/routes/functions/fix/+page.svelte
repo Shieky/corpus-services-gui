@@ -38,6 +38,7 @@
 			responseIsOk = true;
 			codeString = jsonResponse.codeString;
 			internalCodeString = jsonResponse.internalCodeString;
+			console.log('CodeString: ' + codeString);
 			/* 			console.log(codeString);
 			console.log(internalCodeString); */
 		} else {

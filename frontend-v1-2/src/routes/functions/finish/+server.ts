@@ -9,8 +9,7 @@ export async function POST({ request }) {
 	let fixFunctions: string[] = [];
 	let checkFunctions: string[] = [];
 	let internalCodeString: string[] = [];
-	let codeString =
-		'java -Xmx3g -jar <your_corpus_services_path> corpus-services -i <your_input_path> -o <your_output_path>';
+	let codeString = `java -Xmx3g -jar <your_corpus_services_path> corpus-services -i <your_input_path> -o <your_output_path>`;
 	formData.forEach((element: any) => {
 		if (element.checked === true && element.fixable === '1') {
 			//	functionNames[element.functionName] = element.fixable;
@@ -32,7 +31,11 @@ export async function POST({ request }) {
 	fixFunctions.forEach((element) => {
 		codeString += '-c ' + element + ' -f ';
 		//internalCodeString += '-c ' + element + ' -f ';
+		internalCodeString.push('-c');
+		internalCodeString.push(element);
+		internalCodeString.push('-f');
 	});
+
 	return json({
 		codeString: codeString,
 		internalCodeString: internalCodeString
