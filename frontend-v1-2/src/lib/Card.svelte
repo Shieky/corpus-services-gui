@@ -17,7 +17,7 @@
 
 <div
 	class="card overflow-hidden transition-all hover:shadow"
-	in:fade={{ delay: 500, duration: 500 }}
+	in:fade|global={{ delay: 500, duration: 500 }}
 >
 	<div class="card-body overflow-hidden">
 		<h3 class="h3 text-center variant-soft overflow-hidden p-4">

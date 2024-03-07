@@ -55,7 +55,7 @@
 
 <div
 	class="flex flex-col flex-wrap justify-center items-center w-full space-y-10 my-10"
-	transition:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+	transition:slide|global={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
 >
 	<h1 class="h1 p-4 w-full text-center">Welche Funktionen möchtest du auswählen?</h1>
 	<h5 class="h5 p-4 w-1/2 shadow-md variant-glass-tertiary text-center border border-secondary-400">

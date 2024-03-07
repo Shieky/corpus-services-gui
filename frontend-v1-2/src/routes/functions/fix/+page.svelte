@@ -55,13 +55,13 @@
 {#if !responseIsOk}
 	<div
 		class="flex flex-col flex-wrap justify-center items-center my-10 space-y-10"
-		in:fade={{ delay: 100, duration: 300 }}
+		in:fade|global={{ delay: 100, duration: 300 }}
 	>
 		<h1 class="h1 p-4">Welche der ausgewählten Funktionen soll eine Korrektur ausführen?</h1>
 		<h5
 			class="h5 p-4 w-1/2 variant-glass-tertiary text-center outline outline-offset-8 outline-secondary-500 border-secondary-400"
 		>
-			<span in:fade={{ delay: 100, duration: 300 }}>
+			<span in:fade|global={{ delay: 100, duration: 300 }}>
 				Hier kannst du erkennen, ob von dir ausgewählte Funktionen auch eine Korrektur durchführen
 				können, und diese entsprechend anwählen. Über das (i) erhältst du eine kurze Beschreibung,
 				welche Korrekturen mithilfe der Funktion durchgeführt werden.
@@ -71,7 +71,7 @@
 	<form
 		on:submit|preventDefault={handleSubmit}
 		class="flex flex-col"
-		in:fade={{ delay: 100, duration: 300 }}
+		in:fade|global={{ delay: 100, duration: 300 }}
 	>
 		<div class="grid grid-cols-6 justify-center gap-3 md:p-4 mx-auto self-center">
 			<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-1 row-span-2">
@@ -104,17 +104,17 @@
 {:else}
 	<div
 		class="flex flex-col flex-wrap justify-center items-center my-10 space-y-10"
-		in:fade={{ delay: 100, duration: 300 }}
+		in:fade|global={{ delay: 100, duration: 300 }}
 	>
 		<h1 class="h1 p-4">Dateien Auswählen und Hochladen</h1>
 		<h5
 			class="h5 p-4 w-1/2 variant-glass-tertiary text-center outline outline-offset-8 outline-secondary-500 border-secondary-400"
 		>
-			<span in:fade={{ delay: 100, duration: 300 }}>
+			<span in:fade|global={{ delay: 100, duration: 300 }}>
 				Hier kannst du die Dateien hochladen, auf die die ausgewählten Funktionen angewendet werden
 				sollen.<br />
 			</span>
-			<span in:fade={{ delay: 100, duration: 300 }}>
+			<span in:fade|global={{ delay: 100, duration: 300 }}>
 				<sub class="leading-[1px]"
 					>Die Dateien werden nur für die Dauer der Prüfung gespeichert und anschließend sofort
 					wieder gelöscht. Falls du dennoch Bedenken hast, kannst du den generierten Code nutzen, um
@@ -178,7 +178,7 @@
 		action="finish?/upload"
 		enctype="multipart/form-data"
 		class="flex flex-col"
-		in:fade={{ delay: 100, duration: 300 }}
+		in:fade|global={{ delay: 100, duration: 300 }}
 	>
 		<div class="flex flex-row flex-wrap p-4 justify-center items-center space-x-4">
 			<!-- <label for="exb-files">EXB/EXS Datei(en)</label> -->
@@ -304,7 +304,7 @@
 					{#if !taskCompleted}
 						<div
 							class="flex flex-row self-center justify-center items-center w-1/2"
-							in:slide={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
+							in:slide|global={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
 						>
 							<button
 								on:click={(e) => {
@@ -324,7 +324,7 @@
 				{:else}
 					<div
 						class="w-1/2 self-center space-y-10 flex flex-col justify-center"
-						in:fade={{ delay: 100, duration: 300 }}
+						in:fade|global={{ delay: 100, duration: 300 }}
 					>
 						<h5 class="h5 p-4 variant-glass-tertiary text-center border border-secondary-400">
 							Deine Dateien werden hochgeladen und verarbeitet - dies kann je nach Dateigröße und

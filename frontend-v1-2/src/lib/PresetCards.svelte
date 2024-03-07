@@ -65,7 +65,7 @@
 
 <div
 	class="card overflow-hidden transition-all hover:shadow"
-	in:fade={{ delay: 500, duration: 500 }}
+	in:fade|global={{ delay: 500, duration: 500 }}
 >
 	<div class="card-body overflow-hidden">
 		<div class="variant-soft overflow-hidden p-4 flex flex-row justify-between">
