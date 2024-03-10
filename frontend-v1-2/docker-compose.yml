@@ -6,7 +6,7 @@ services:
   external:
     container_name: external
     # The name of the image that will be created when building this container
-    image: external-website
+    image: corpus-services
     build:
       context: .
       dockerfile: Dockerfile

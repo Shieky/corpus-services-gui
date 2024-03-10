@@ -1,28 +1,34 @@
-#Dockerfile
+FROM node:18 AS builder
 
-# Use this image as the platform to build the app
-FROM node:18-alpine AS external-website
-
-# A small line inside the image to show who made it
-LABEL Developers="Felicitaz Daut"
-
-# The WORKDIR instruction sets the working directory for everything that will happen next
 WORKDIR /app
-
-# Copy all local files into the image
-COPY . .
-
-# Clean install all node modules
+COPY package*.json .
 RUN npm ci
 
-# Build SvelteKit app
+
+
+COPY . .
 RUN npm run build
+RUN npm prune --production
 
-# Delete source code files that were used to build the app that are no longer needed
-RUN rm -rf src/ static/ emailTemplates/ docker-compose.yml
+FROM node:18 AS deploy-static
+RUN apt update
+#install java
+RUN apt install -y default-jre
+RUN apt install -y default-jdk
+RUN update-alternatives --config java
+#set java home
+RUN export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+#install zip
+RUN apt install -y zip
 
-# The USER instruction sets the user name to use as the default user for the remainder of the current stage
-USER node:node
-
-# This is the command that will be run inside the image when you tell Docker to start the container
-CMD ["node","build/index.js"]
+WORKDIR /app
+COPY --from=builder /app/build build/
+COPY --from=builder /app/node_modules node_modules/
+COPY package.json .
+#copy resources folder
+COPY resources resources/
+#copy static folder
+COPY static static/
+EXPOSE 3000
+ENV NODE_ENV=production
+CMD [ "node", "build" ]
