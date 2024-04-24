@@ -4,8 +4,6 @@ WORKDIR /app
 COPY package*.json .
 RUN npm ci
 
-
-
 COPY . .
 RUN npm run build
 RUN npm prune --production
@@ -29,6 +27,13 @@ COPY package.json .
 COPY resources resources/
 #copy static folder
 COPY static static/
+# Create uploads folder in static
+RUN mkdir -p static/uploads
+# set permissions for uploads folder
+RUN chmod 777 static/uploads
 EXPOSE 3000
 ENV NODE_ENV=production
+ENV ORIGIN http://localhost:3000
+# set request body size to infinity
+ENV BODY_SIZE_LIMIT=Infinity
 CMD [ "node", "build" ]
