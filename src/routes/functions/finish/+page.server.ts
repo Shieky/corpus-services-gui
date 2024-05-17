@@ -127,14 +127,14 @@ async function _download(uri: string, url: string) {
 	});
 }
 
-async function makeZip(tmpDir: any) {
+async function makeZip(tmpDir: never) {
 	return new Promise((resolve, reject) => {
 		const zipFile = tmpDir + '.zip';
 		const zip = spawn('zip', ['-r', zipFile, tmpDir]);
-		zip.stdout.on('data', (data: any) => {
+		zip.stdout.on('data', (data: unknown) => {
 			console.log(`stdout: ${data}`);
 		});
-		zip.stderr.on('data', (data: any) => {
+		zip.stderr.on('data', (data: unknown) => {
 			console.error(`stderr: ${data}`);
 		});
 		zip.on('close', (code) => {
@@ -170,7 +170,7 @@ function runCorpusServices(corpusServicesPath: string, tmpDir: string, code: str
 
 		let log = '';
 		let errorLog = '';
-		let logArray: string[] = [];
+		const logArray: string[] = [];
 		child.stdout.on('data', (data) => {
 			console.log(`stdout: ${data}`);
 			log += data;

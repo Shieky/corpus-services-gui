@@ -5,7 +5,6 @@
 	import { checkboxNames } from '../../../states';
 	export let data;
 	let picekdPreset;
-	console.log(data);
 	$: {
 		checkboxNames.update((content) => [...content, 'test']);
 	}
@@ -153,7 +152,7 @@
 	</div>
 	<button
 		type="submit"
-		class="btn btn-md variant-filled-primary  hover:variant-filled-surface hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
+		class="btn btn-md variant-filled-primary hover:variant-filled-surface hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
 		>Weiter</button
 	>
 </form>

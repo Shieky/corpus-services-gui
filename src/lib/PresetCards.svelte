@@ -59,8 +59,6 @@
 		data.forEach((item) => (item.checked = false));
 		data = [...data]; // Reassign to ensure Svelte's reactivity
 	}
-
-	console.log(data);
 </script>
 
 <div

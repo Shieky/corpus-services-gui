@@ -29,6 +29,7 @@
 	<svelte:fragment slot="footer">
 		<div class="text-center text-gray-500 pt-4 text-xs mb-3 border-top-gradient">
 			<p>Made with ❤️ by Felicitaz</p>
+			<p><small>v0.9</small></p>
 		</div>
 	</svelte:fragment>
 	<!-- Page Route Content -->
