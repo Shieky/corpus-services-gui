@@ -1,0 +1,19 @@
+services:
+  external:
+    container_name: deploy-static
+    # The name of the image that will be created when building this container
+    image: corpus-services
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: 'node'
+    environment:
+      - ORIGIN=http://localhost:3000
+    # Internal server error messages will not send stacktrace to the browser in production
+    #- NODE_ENV=dev
+    # Points to a file with the sensitive environment variables
+    #   env_file:
+    #    - .env
+    restart: unless-stopped
+    ports:
+      - 3000:3000
