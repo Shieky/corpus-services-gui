@@ -28,7 +28,7 @@
 	</svelte:fragment>
 	<svelte:fragment slot="footer">
 		<div class="text-center text-gray-500 pt-4 text-xs mb-3 border-top-gradient">
-			<p>Made with ❤️ by Felicitaz</p>
+			<p>Ein Angebot des <a href="https://www.slm.uni-hamburg.de/hzsk/" target="_blank">HZSK der Universität Hamburg</a> - <a href="https://www.slm.uni-hamburg.de/hzsk/impressum.html" target="_blank"> Impressum</a></p>
 			<p><small>v0.9</small></p>
 		</div>
 	</svelte:fragment>
