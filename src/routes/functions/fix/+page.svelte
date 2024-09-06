@@ -86,7 +86,7 @@
 		class="flex flex-col flex-wrap justify-center items-center my-10 space-y-10"
 		in:fade|global={{ delay: 100, duration: 300 }}
 	>
-		<h1 class="h1 p-4">Dateien Auswählen und Hochladen</h1>
+		<h1 class="h1 p-4">Dateiauswahl</h1>
 		<h5
 			class="h5 p-4 w-1/2 variant-glass-tertiary text-center outline outline-offset-8 outline-secondary-500 border-secondary-400"
 		>
@@ -98,8 +98,8 @@
 				<sub class="leading-[1px]"
 					>Die Dateien werden nur für die Dauer der Prüfung gespeichert und anschließend sofort
 					wieder gelöscht. Falls du dennoch Bedenken hast, kannst du den generierten Code nutzen, um
-					die Corpus Services bei dir lokal auszuführen (Achtung: Die Corpus Services können nur
-					über die Konsole ausgeführt werden und haben keine grafische Oberfläche).</sub
+					die Corpus Services bei dir lokal auszuführen (Achtung: Die Corpus Services müssen dafür lokal installiert werden und können nur
+					über die Konsole ausgeführt werden).</sub
 				></span
 			>
 		</h5>
@@ -145,8 +145,7 @@
 		<input type="hidden" name="internalCode" value={internalCodeString} />
 		<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center text-center">
 			<Accordion
-				summary="Generierter Code"
-				content="Generierter Code"
+				summary="Corpus Services Konsoleneingabe"
 				codeBlockString={codeString}
 			/>
 		</div>
@@ -212,23 +211,22 @@
 		{#if taskCompleted && tasknotFailed}
 			<h5 class="h5 p-4 variant-glass-tertiary text-center border border-primary-400 w-2/3">
 				{#if fileSuccessfullyDownloaded}
-					Deine Dateien wurden erfolgreich verarbeitet und heruntergeladen, vielen Dank für die
-					Nutzung
+					Deine Dateien wurden heruntergeladen und vom Server gelöscht.
 				{:else}
-					Deine Dateien wurden erfolgreich verarbeitet
+					Deine Dateien wurden erfolgreich verarbeitet.
 				{/if}
 			</h5>
 			{#if !fileSuccessfullyDownloaded}
 				<button
 					on:click={() => downloadFile()}
 					class="btn btn-lg variant-filled-primary hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
-					>Verarbeitete Dateien Herunterladen</button
+					>Verarbeitete Dateien herunterladen</button
 				>
 			{/if}
 		{/if}
 		{#if taskCompleted && !tasknotFailed}
 			<h5 class="h5 p-4 variant-glass-error text-center border border-primary-400">
-				Deine Dateien konnten nicht verarbeitet werden. Bitte überprüfe die Log-Datei.
+				Deine Dateien konnten nicht verarbeitet werden - bitte überprüfe die Log-Datei.
 			</h5>
 		{/if}
 	</div>

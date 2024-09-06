@@ -18,8 +18,7 @@
 		<div class="alert-message">
 			<h3 class="h3 text-center">Datenschutzhinweis</h3>
 			<p>
-				Die hochgeladenen Daten werden nur im verarbeitungsprozess benutzt und nach Download
-				komplett gelöscht.
+				Die hochgeladenen Daten werden nur im Verarbeitungsprozess genutzt und nach dem Download gelöscht.
 			</p>
 		</div>
 	</aside>

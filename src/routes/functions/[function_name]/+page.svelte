@@ -58,10 +58,10 @@
 >
 	<h1 class="h1 p-4 w-full text-center">Welche Funktionen möchtest du auswählen?</h1>
 	<h5 class="h5 p-4 w-1/2 shadow-md variant-glass-tertiary text-center border border-secondary-400">
-		Über die Buttons kannst du den vorausgewählten Funktionssets wechseln oder die Auswahl
+		Über die Buttons kannst du Funktionssets auswählen oder die Auswahl
 		zurücksetzen. Bei einer individuellen Funktionsauswahl kann dir die Vorsortierung der Funktionen
 		helfen. Über das (i) hinter den Funktionen kannst du dir eine Beschreibung anzeigen lassen. Alle
-		Funktionen können entweder eine Prüfung durchführen und einen Report dazu ausgeben oder eine
+		Funktionen können entweder eine Prüfung durchführen und einen Report erzeugen oder eine
 		Visualisierung (o.ä.) erstellen. Einige Funktionen können zusätzlich Korrekturen („Fixes“)
 		durchführen. Ob eine hier angewählte Funktion nur eine Prüfung oder auch eine Korrektur
 		durchführen soll, kann im nächsten Schritt ausgewählt werden.
