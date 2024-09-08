@@ -98,8 +98,8 @@
 				<sub class="leading-[1px]"
 					>Die Dateien werden nur für die Dauer der Prüfung gespeichert und anschließend sofort
 					wieder gelöscht. Falls du dennoch Bedenken hast, kannst du den generierten Code nutzen, um
-					die Corpus Services bei dir lokal auszuführen (Achtung: Die Corpus Services müssen dafür lokal installiert werden und können nur
-					über die Konsole ausgeführt werden).</sub
+					die Corpus Services bei dir lokal auszuführen (Achtung: Die Corpus Services müssen dafür
+					lokal installiert werden und können nur über die Konsole ausgeführt werden).</sub
 				></span
 			>
 		</h5>
@@ -144,10 +144,7 @@
 		</div>
 		<input type="hidden" name="internalCode" value={internalCodeString} />
 		<div class="w-full flex flex-wrap flex-row justify-center mx-auto self-center text-center">
-			<Accordion
-				summary="Corpus Services Konsoleneingabe"
-				codeBlockString={codeString}
-			/>
+			<Accordion summary="Corpus Services Konsoleneingabe" codeBlockString={codeString} />
 		</div>
 		{#if taskCompleted}
 			{#if logString != ''}
@@ -182,7 +179,7 @@
 									e.preventDefault();
 									responseIsOk = false;
 								}}
-								class="btn btn-lg variant-filled-warning hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
+								class="btn btn-lg variant-filled-surface hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
 								>Zurück</button
 							>
 							<button
