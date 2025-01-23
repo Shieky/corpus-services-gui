@@ -2,7 +2,6 @@ import { join } from 'path';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
 import { theme } from './theme';
-import type { Config } from 'tailwindcss';
 
 // 1. Import the Skeleton plugin
 import { skeleton } from '@skeletonlabs/tw-plugin';
@@ -29,6 +28,6 @@ const config = {
 			}
 		})
 	]
-} satisfies Config;
+};
 
 export default config;

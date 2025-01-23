@@ -3,12 +3,13 @@
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { checkboxNames } from '../../../states';
-	export let data;
-	let picekdPreset;
-	$: {
-		checkboxNames.update((content) => [...content, 'test']);
-	}
-	let infoTexte = {
+	import Button from '$lib/Button.svelte';
+
+	let { data } = $props();
+	// $: {
+	// 	checkboxNames.update((content) => [...content, 'test']);
+	// }
+	const infoTexte = {
 		hiat: {
 			title: 'HIAT-CHECK',
 			content:
@@ -42,7 +43,7 @@
 
 	function selectAll(presetName: string) {
 		data.data.forEach((item) => {
-			if (item.presets[presetName] == true) item.checked = true;
+			if (item.presets[presetName as keyof typeof item.presets] == true) item.checked = true;
 		});
 		data.data = [...data.data]; // Reassign to ensure Svelte's reactivity
 	}
@@ -58,13 +59,13 @@
 >
 	<h1 class="h1 p-4 w-full text-center">Welche Funktionen möchtest du auswählen?</h1>
 	<h5 class="h5 p-4 w-1/2 shadow-md variant-glass-tertiary text-center border border-secondary-400">
-		Über die Buttons kannst du Funktionssets auswählen oder die Auswahl
-		zurücksetzen. Bei einer individuellen Funktionsauswahl kann dir die Vorsortierung der Funktionen
-		helfen. Über das (i) hinter den Funktionen kannst du dir eine Beschreibung anzeigen lassen. Alle
-		Funktionen können entweder eine Prüfung durchführen und einen Report erzeugen oder eine
-		Visualisierung (o.ä.) erstellen. Einige Funktionen können zusätzlich Korrekturen („Fixes“)
-		durchführen. Ob eine hier angewählte Funktion nur eine Prüfung oder auch eine Korrektur
-		durchführen soll, kann im nächsten Schritt ausgewählt werden.
+		Über die Buttons kannst du Funktionssets auswählen oder die Auswahl zurücksetzen. Bei einer
+		individuellen Funktionsauswahl kann dir die Vorsortierung der Funktionen helfen. Über das (i)
+		hinter den Funktionen kannst du dir eine Beschreibung anzeigen lassen. Alle Funktionen können
+		entweder eine Prüfung durchführen und einen Report erzeugen oder eine Visualisierung (o.ä.)
+		erstellen. Einige Funktionen können zusätzlich Korrekturen („Fixes“) durchführen. Ob eine hier
+		angewählte Funktion nur eine Prüfung oder auch eine Korrektur durchführen soll, kann im nächsten
+		Schritt ausgewählt werden.
 	</h5>
 </div>
 <div class="flex flex-col justify-center w-full space-y-5">
@@ -72,42 +73,14 @@
 		<h3 class="h3 text-center">Presets</h3>
 	</div>
 	<div class="flex flex-row flex-wrap justify-center self-center w-full rounded-2xl">
-		<button
-			type="button"
-			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('hiat')}>HIAT-CHECK</button
-		>
-		<button
-			type="button"
-			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('gat')}>GAT-CHECK</button
-		>
-		<button
-			type="button"
-			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('transkript')}>TRANSKRIPT-CHECK</button
-		>
-		<button
-			type="button"
-			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('korpus')}>KORPUS-AUSBEREITUNG</button
-		>
-		<button
-			type="button"
-			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('meta')}>METADATEN-CHECK</button
-		>
-		<button
-			type="button"
-			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('html')}>HTML-ANSICHTEN</button
-		>
+		<Button onclick={() => selectAll('hiat')} title="HIAT-CHECK"></Button>
+		<Button onclick={() => selectAll('gat')} title="GAT-CHECK"></Button>
+		<Button onclick={() => selectAll('transkript')} title="TRANSKRIPT-CHECK"></Button>
+		<Button onclick={() => selectAll('korpus')} title="KORPUS-AUSBEREITUNG"></Button>
+		<Button onclick={() => selectAll('meta')} title="METADATEN-CHECK"></Button>
+		<Button onclick={() => selectAll('html')} title="HTML-ANSICHTEN"></Button>
 		<div class="w-full flex flex-col justify-center">
-			<button
-				type="button"
-				class="w-max self-center btn btn-md variant-glass border border-secondary-500 hover:variant-glass-secondary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-				on:click={() => deselectAll()}>AUSWAHL ZURÜCKSETZEN</button
-			>
+			<Button onclick={() => deselectAll()} title="AUSWAHL ZURÜCKSETZEN"></Button>
 		</div>
 	</div>
 </div>

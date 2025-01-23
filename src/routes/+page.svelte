@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Card from '$lib/Card.svelte';
-	import { fade } from 'svelte/transition';
 </script>
 
 <div class="flex flex-col flex-wrap justify-center items-center p-5 space-y-10">
@@ -18,7 +17,8 @@
 		<div class="alert-message">
 			<h3 class="h3 text-center">Datenschutzhinweis</h3>
 			<p>
-				Die hochgeladenen Daten werden nur im Verarbeitungsprozess genutzt und nach dem Download gelöscht.
+				Die hochgeladenen Daten werden nur im Verarbeitungsprozess genutzt und nach dem Download
+				gelöscht.
 			</p>
 		</div>
 	</aside>

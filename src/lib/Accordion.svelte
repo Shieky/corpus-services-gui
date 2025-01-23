@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Accordion, AccordionItem, CodeBlock } from '@skeletonlabs/skeleton';
 
-	export let summary;
-	export let content;
-
-	export let codeBlockString: string | null = null;
+	let {
+		summary,
+		content,
+		codeBlockString
+	}: { summary: string; content: string; codeBlockString?: string } = $props();
 </script>
 
 <Accordion width="w-3/4">

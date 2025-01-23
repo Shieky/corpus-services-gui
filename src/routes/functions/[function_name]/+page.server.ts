@@ -3,6 +3,27 @@ import fs from 'fs';
 import path from 'path';
 import Papa from 'papaparse';
 
+type checkboxNames = {
+	id: string;
+	name: string;
+	tooltip: string;
+	checked: boolean;
+	visible: boolean;
+	functionName: string;
+	dataType: string;
+	fixable: string;
+	fixActivated: boolean;
+	uniqueName: string;
+	presets: {
+		hiat: boolean;
+		gat: boolean;
+		transkript: boolean;
+		korpus: boolean;
+		meta: boolean;
+		html: boolean;
+	};
+};
+
 export const load = (async ({ params }) => {
 	const filePath = path.join(process.cwd(), '/resources/', 'corpus-funktionen.csv');
 	const fileContents = fs.readFileSync(filePath, 'utf-8');
@@ -13,7 +34,7 @@ export const load = (async ({ params }) => {
 			error: (error) => reject(error)
 		});
 	});
-	let checkboxNames = [];
+	let checkboxNames: checkboxNames[] = [];
 	let tmpObject = {};
 	/* The presets are built through an CSV file, which is provided in the resources folder */
 	results.forEach((element, index) => {

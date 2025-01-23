@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import { modalStore } from '@skeletonlabs/skeleton';
-	import type { ModalSettings, PopupSettings } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import type { ModalSettings } from '@skeletonlabs/skeleton';
 
-	export let cardHeader = 'Card Header';
-	export let cardBody = 'Card Body';
-	export let cardFooterLink = '#';
-	export let modalContent = {};
+	type props = {
+		cardHeader: string;
+		cardBody: string;
+		cardFooterLink: string;
+		modalContent: { title: string; content: string };
+	};
+
+	let { cardHeader, cardBody, cardFooterLink = '#', modalContent }: props = $props();
+
+	const modal = getModalStore();
 
 	const modalSettings: ModalSettings = {
 		type: 'alert',
@@ -22,7 +28,7 @@
 	<div class="card-body overflow-hidden">
 		<h3 class="h3 text-center variant-soft overflow-hidden p-4">
 			{cardHeader}
-			<button type="button" class="btn-icon" on:click={() => modalStore.trigger(modalSettings)}>
+			<button aria-label="Open Modal" class="btn-icon" onclick={() => modal.trigger(modalSettings)}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
