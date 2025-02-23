@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import Papa from 'papaparse';
 
-type checkboxNames = {
+type TempCheckboxObject = {
 	id: string;
 	name: string;
 	tooltip: string;
@@ -24,18 +24,38 @@ type checkboxNames = {
 	};
 };
 
+type CsvParsingObject = {
+	HIAT: string;
+	GAT: string;
+	Transkript: string;
+	Korpus: string;
+	Meta: string;
+	HTML: string;
+	Data: string;
+	Fix: string;
+	Name: string;
+	Anzeigename: string;
+	'Web?': string;
+	Beschreibung: string;
+	Parameter: string;
+	Anmerkung: string;
+};
+
 export const load = (async ({ params }) => {
 	const filePath = path.join(process.cwd(), '/resources/', 'corpus-funktionen.csv');
 	const fileContents = fs.readFileSync(filePath, 'utf-8');
 
-	const results = await new Promise((resolve, reject) => {
-		Papa.parse(fileContents, {
-			complete: (parsed) => resolve(parsed.data),
-			error: (error) => reject(error)
-		});
-	});
-	let checkboxNames: checkboxNames[] = [];
-	let tmpObject = {};
+	// const results = await new Promise((resolve, reject) => {
+	// 	Papa.parse<CsvParsingObject>(fileContents, {
+	// 		complete: (parsed) => resolve(parsed.data),
+	// 		error: (error: Error) => reject(error)
+	// 	});
+	// });
+
+	let tmpObject: TempCheckboxObject;
+
+	const checkboxNames: TempCheckboxObject[] = [];
+
 	/* The presets are built through an CSV file, which is provided in the resources folder */
 	results.forEach((element, index) => {
 		if (element[9] != '' && element[9] != undefined && index != 0) {
@@ -64,3 +84,18 @@ export const load = (async ({ params }) => {
 	});
 	return { data: checkboxNames, params };
 }) satisfies PageServerLoad;
+
+async function parseFile(fileContents: string) {
+	const res = Papa.parse<CsvParsingObject>(fileContents, {
+		delimiter: ';',
+		dynamicTyping: true,
+		header: true,
+		skipEmptyLines: true,
+		complete: (parsed) => {
+			return parsed.data;
+		},
+		error: (error: Error) => {
+			console.error(error);
+		}
+	});
+}
