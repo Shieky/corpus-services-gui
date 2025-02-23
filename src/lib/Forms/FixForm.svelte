@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import PresetCards from '$lib/PresetCards.svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
 
-	export let cbdata;
+	let { cbdata } = $props();
 	let codeString = '';
 	let responseIsOk = false;
 	let internalCodeString = '';
@@ -49,7 +51,7 @@
 	</h5>
 </div>
 <form
-	on:submit|preventDefault={handleSubmit}
+	onsubmit={preventDefault(handleSubmit)}
 	class="flex flex-col"
 	in:fade|global={{ delay: 100, duration: 300 }}
 >

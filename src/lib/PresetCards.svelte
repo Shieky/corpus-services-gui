@@ -5,6 +5,26 @@
 	import { fade } from 'svelte/transition';
 	import Checkbox from './Checkbox.svelte';
 	import { checkboxNames } from '../states';
+	import type { TempCheckboxObject } from '../routes/functions/[function_name]/+page.server';
+	interface Props {
+		header?: string;
+		data: any;
+		dataType: string[];
+		modalContent?: any;
+		fixMode?: boolean;
+		comparingFunction?: string;
+		checkedAndReadonly?: boolean;
+	}
+
+	let {
+		header = 'Card Header',
+		data = $bindable(),
+		dataType,
+		modalContent = {},
+		fixMode = false,
+		comparingFunction = '',
+		checkedAndReadonly = false
+	}: Props = $props();
 
 	const popupHoverSelect: PopupSettings = {
 		event: 'hover',
@@ -17,48 +37,42 @@
 		target: 'hoverDeselectAll',
 		placement: 'top'
 	};
-	export let header = 'Card Header';
-	export let data;
-	export let dataType: string[];
-	export let modalContent = {};
-	export let fixMode = false;
-	export let comparingFunction = '';
-
-	export let checkedAndReadonly = false;
 
 	const modalSettings: ModalSettings = {
 		type: 'alert',
 		title: modalContent.title,
 		body: modalContent.content
 	};
+
 	if (comparingFunction != '') {
-		data.forEach((item) =>
-			item.presets[comparingFunction] == true ? (item.checked = true) : (item.checked = false)
+		data.forEach((item: TempCheckboxObject) =>
+			item.presets[comparingFunction as keyof typeof item.presets] === true ? (item.checked = true) : (item.checked = false)
 		);
 		//	console.log(data);
 	}
 	if (checkedAndReadonly) {
-		data.forEach((item) => (item.checked = true));
+		data.forEach((item: TempCheckboxObject) => (item.checked = true));
 		data = [...data]; // Reassign to ensure Svelte's reactivity
 	}
 	if (fixMode == true && checkedAndReadonly == false) {
 		/* Remove every entry which is not fixable */
-		data = data.filter((item) => item.fixable == true);
+		data = data.filter((item: TempCheckboxObject) => item.fixable === "true");
 	}
 	if (fixMode == true && checkedAndReadonly == true) {
 		/* Remove every entry which is fixable */
-		data = data.filter((item) => item.fixable == false);
+		data = data.filter((item: TempCheckboxObject) => item.fixable === "false");
 		data = [...data]; // Reassign to ensure Svelte's reactivity
 	}
 
 	function selectAll() {
-		data.forEach((item) => (item.checked = true));
+		data.forEach((item: TempCheckboxObject) => (item.checked = true));
 		data = [...data]; // Reassign to ensure Svelte's reactivity
 	}
 	function deselectAll() {
-		data.forEach((item) => (item.checked = false));
+		data.forEach((item: TempCheckboxObject) => (item.checked = false));
 		data = [...data]; // Reassign to ensure Svelte's reactivity
 	}
+
 </script>
 
 <div
@@ -70,11 +84,11 @@
 			<div class="flex flex-row">
 				<h3 class="h3 overflow-hidden p-2 uppercase w-full inline-flex">{header}</h3>
 				{#if checkedAndReadonly == false}
-					<button
+					<button aria-label="help"
 						use:popup={popupHoverSelect}
 						type="button"
 						class="btn-icon [&>*]:pointer-events-none"
-						on:click={() => selectAll()}
+						onclick={() => selectAll()}
 						><svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -95,13 +109,13 @@
 						data-popup="hoverSelectAll"
 					>
 						<p class="text-lg">Alles auswählen</p>
-						<div class="arrow variant-glass-primary border-b border-r border-primary-50" />
+						<div class="arrow variant-glass-primary border-b border-r border-primary-50"></div>
 					</div>
-					<button
+					<button aria-label="help"
 						use:popup={popupHoverDeselect}
 						type="button"
 						class="btn-icon [&>*]:pointer-events-none"
-						on:click={() => deselectAll()}
+						onclick={() => deselectAll()}
 						><svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
@@ -122,12 +136,12 @@
 						data-popup="hoverDeselectAll"
 					>
 						<p class="text-lg">Alles abwählen</p>
-						<div class="arrow variant-glass-primary border-b border-r border-primary-50" />
+						<div class="arrow variant-glass-primary border-b border-r border-primary-50"></div>
 					</div>
 				{/if}
 			</div>
 
-			<button type="button" class="btn-icon" on:click={() => modalStore.trigger(modalSettings)}>
+			<button aria-label="help" type="button" class="btn-icon" onclick={() => modalStore.trigger(modalSettings)}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"

@@ -1,6 +1,10 @@
 <script lang="ts">
-	export let label: string = 'Datei(en)';
-	export let inputName: string = 'file';
+	interface Props {
+		label?: string;
+		inputName?: string;
+	}
+
+	let { label = 'Datei(en)', inputName = 'file' }: Props = $props();
 </script>
 
 <div class="w-3/12 card rounded-md">

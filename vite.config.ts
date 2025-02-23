@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	base: '',
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},

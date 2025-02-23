@@ -8,6 +8,11 @@
 	import { AppShell, AppBar, Modal, LightSwitch } from '@skeletonlabs/skeleton';
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	let state = 'start';
 </script>
@@ -28,7 +33,13 @@
 	</svelte:fragment>
 	<svelte:fragment slot="footer">
 		<div class="text-center text-gray-500 pt-4 text-xs mb-3 border-top-gradient">
-			<p>Ein Angebot des <a href="https://www.slm.uni-hamburg.de/hzsk/" target="_blank">HZSK der Universität Hamburg</a> - <a href="https://www.slm.uni-hamburg.de/hzsk/impressum.html" target="_blank"> Impressum</a></p>
+			<p>
+				Ein Angebot des <a href="https://www.slm.uni-hamburg.de/hzsk/" target="_blank"
+					>HZSK der Universität Hamburg</a
+				>
+				-
+				<a href="https://www.slm.uni-hamburg.de/hzsk/impressum.html" target="_blank"> Impressum</a>
+			</p>
 			<p><small>v0.9</small></p>
 		</div>
 	</svelte:fragment>

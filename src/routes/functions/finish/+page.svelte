@@ -1,4 +1,3 @@
 <script lang="ts">
-	export let data;
-	export let form;
+	let { data, form } = $props();
 </script>

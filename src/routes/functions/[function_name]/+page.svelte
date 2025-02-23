@@ -2,12 +2,13 @@
 	import PresetCards from '$lib/PresetCards.svelte';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { checkboxNames } from '../../../states';
-	export let data;
-	let picekdPreset;
-	$: {
-		checkboxNames.update((content) => [...content, 'test']);
-	}
+	import type { PageProps } from './$types';
+	import type { TempCheckboxObject } from './+page.server';
+
+	let { data }: PageProps = $props();
+
+	let checkboxData = $state(data.data);
+
 	let infoTexte = {
 		hiat: {
 			title: 'HIAT-CHECK',
@@ -40,15 +41,13 @@
 		}
 	};
 
-	function selectAll(presetName: string) {
-		data.data.forEach((item) => {
+	function selectAll(presetName: keyof TempCheckboxObject["presets"]) {
+		checkboxData.forEach((item: TempCheckboxObject) => {
 			if (item.presets[presetName] == true) item.checked = true;
 		});
-		data.data = [...data.data]; // Reassign to ensure Svelte's reactivity
 	}
 	function deselectAll() {
-		data.data.forEach((item) => (item.checked = false));
-		data.data = [...data.data]; // Reassign to ensure Svelte's reactivity
+		checkboxData.forEach((item: TempCheckboxObject) => (item.checked = false));
 	}
 </script>
 
@@ -75,38 +74,38 @@
 		<button
 			type="button"
 			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('hiat')}>HIAT-CHECK</button
+			onclick={() => selectAll('hiat')}>HIAT-CHECK</button
 		>
 		<button
 			type="button"
 			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('gat')}>GAT-CHECK</button
+			onclick={() => selectAll('gat')}>GAT-CHECK</button
 		>
 		<button
 			type="button"
 			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('transkript')}>TRANSKRIPT-CHECK</button
+			onclick={() => selectAll('transkript')}>TRANSKRIPT-CHECK</button
 		>
 		<button
 			type="button"
 			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('korpus')}>KORPUS-AUSBEREITUNG</button
+			onclick={() => selectAll('korpus')}>KORPUS-AUSBEREITUNG</button
 		>
 		<button
 			type="button"
 			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('meta')}>METADATEN-CHECK</button
+			onclick={() => selectAll('meta')}>METADATEN-CHECK</button
 		>
 		<button
 			type="button"
 			class="btn btn-md variant-glass border border-primary-700 hover:variant-glass-primary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-			on:click={() => selectAll('html')}>HTML-ANSICHTEN</button
+			onclick={() => selectAll('html')}>HTML-ANSICHTEN</button
 		>
 		<div class="w-full flex flex-col justify-center">
 			<button
 				type="button"
 				class="w-max self-center btn btn-md variant-glass border border-secondary-500 hover:variant-glass-secondary hover:scale-105 hover:shadow-xl mr-2 mb-4 transition-all"
-				on:click={() => deselectAll()}>AUSWAHL ZURÜCKSETZEN</button
+				onclick={() => deselectAll()}>AUSWAHL ZURÜCKSETZEN</button
 			>
 		</div>
 	</div>
@@ -115,7 +114,7 @@
 	<div class="grid grid-cols-6 justify-center gap-3 md:p-4 mx-auto self-center">
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-1 row-span-2">
 			<PresetCards
-				data={data.data}
+				bind:data={checkboxData}
 				header="Transkript-Funktionen (EXB, EXS)"
 				dataType={['BASICTRANSCRIPTIONDATA', 'SEGMENTEDTRANSCRIPTIONDATA']}
 				modalContent={infoTexte.hiat}
@@ -124,7 +123,7 @@
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-3 row-span-2">
 			<PresetCards
-				data={data.data}
+				bind:data={checkboxData}
 				header="Korpusmanager-Funktionen (COMA)"
 				dataType={['COMADATA']}
 				modalContent={infoTexte.gat}
@@ -133,7 +132,7 @@
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-5 row-span-2">
 			<PresetCards
-				data={data.data}
+				bind:data={checkboxData}
 				header="Metadaten-Funktionen (CMDI)"
 				dataType={['CMDIDATA']}
 				modalContent={infoTexte.transkript}
@@ -142,7 +141,7 @@
 		</div>
 		<div class="col-span-full md:col-span-4 md:col-start-2 col-start-1 row-start-7 row-span-2">
 			<PresetCards
-				data={data.data}
+				bind:data={checkboxData}
 				header="Andere (div.)"
 				dataType={['GENERAL', 'UNSPECIFIEDXMLDATA']}
 				modalContent={infoTexte.html}

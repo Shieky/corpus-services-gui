@@ -7,24 +7,23 @@
 	import { ProgressBar } from '@skeletonlabs/skeleton';
 	import FixForm from '$lib/Forms/FixForm.svelte';
 	import FileInput from '$lib/FileInput.svelte';
-	export let data;
-	export let form;
+	let { data, form } = $props();
 
 	let cbdata = form?.data.data;
 	//console.log(cbdata);
 
-	let codeString = '';
-	let responseIsOk = false;
-	let internalCodeString = '';
-	let formLoading = false;
-	let logString = '';
-	let errorlogString = '';
-	$: logString = '';
-	$: errorlogString = '';
-	let taskCompleted = false;
-	let tasknotFailed = true;
-	let fileDownloadUri = '';
-	let fileSuccessfullyDownloaded = false;
+	let codeString = $state('');
+	let responseIsOk = $state(false);
+	let internalCodeString = $state('');
+	let formLoading = $state(false);
+
+	let logString = $state();
+	let errorlogString = $state();
+
+	let taskCompleted = $state(false);
+	let tasknotFailed = $state(true);
+	let fileDownloadUri = $state('');
+	let fileSuccessfullyDownloaded = $state(false);
 
 	//catch dispatch
 	const handleResponseOK = (event) => {
@@ -175,7 +174,7 @@
 							in:slide|global={{ delay: 250, duration: 300, easing: quintOut, axis: 'y' }}
 						>
 							<button
-								on:click={(e) => {
+								onclick={(e) => {
 									e.preventDefault();
 									responseIsOk = false;
 								}}
@@ -215,7 +214,7 @@
 			</h5>
 			{#if !fileSuccessfullyDownloaded}
 				<button
-					on:click={() => downloadFile()}
+					onclick={() => downloadFile()}
 					class="btn btn-lg variant-filled-primary hover:variant-filled-primary hover:scale-105 hover:shadow-xl w-1/2 self-center transition-all duration-300 ease-in-out m-8"
 					>Verarbeitete Dateien herunterladen</button
 				>
